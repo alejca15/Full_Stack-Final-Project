@@ -17,7 +17,7 @@ const post_direction = async (req, res) => {
       const Direction = await Directions.create({
         direction_name,
       });
-      res.status(201).json(Direction);
+      res.status(201).json({ id: Direction.id });
     } catch (error) {
       res.status(500).json({ error: "Error al añadir la direccion" });
     }

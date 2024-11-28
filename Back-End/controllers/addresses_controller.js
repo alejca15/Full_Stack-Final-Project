@@ -19,12 +19,13 @@ const post_addresses = async (req, res) => {
       canton_id,
       direction_id,
     });
-    res.status(201).json(Address);
+    res.status(201).json({ id: Address.id });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al añadir la Address" });
   }
 };
+
 module.exports = {
   get_addresses,
   post_addresses,

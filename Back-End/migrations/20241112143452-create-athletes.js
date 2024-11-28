@@ -38,6 +38,10 @@ module.exports = {
         allowNull: false,
         unique:true,
       },
+      athlete_password: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       athlete_phone: {
         type: Sequelize.STRING,
         allowNull: false,

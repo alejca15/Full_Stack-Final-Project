@@ -22,6 +22,7 @@ const post_athletes = async (req, res) => {
       nationality,
       gender,
       athlete_mail,
+      athlete_password,
       athlete_phone,
       blood_type,
       address_id,
@@ -39,6 +40,7 @@ const post_athletes = async (req, res) => {
       !nationality ||
       !gender ||
       !athlete_mail ||
+      !athlete_password||
       !athlete_phone ||
       !blood_type ||
       !address_id ||
@@ -58,6 +60,7 @@ const post_athletes = async (req, res) => {
       nationality,
       gender,
       athlete_mail,
+      athlete_password,
       athlete_phone,
       blood_type,
       address_id,
@@ -67,7 +70,7 @@ const post_athletes = async (req, res) => {
       addition_date,
       athlete_status,
     });
-    res.status(201).json(athlete);
+    res.status(201).json({ id: athlete.id });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al añadir el atleta" });
@@ -102,6 +105,7 @@ const update_athlete = async (req, res) => {
       nationality,
       gender,
       athlete_mail,
+      athlete_password,
       athlete_phone,
       blood_type,
       address_id,
@@ -125,6 +129,7 @@ const update_athlete = async (req, res) => {
       nationality,
       gender,
       athlete_mail,
+      athlete_password,
       athlete_phone,
       blood_type,
       address_id,

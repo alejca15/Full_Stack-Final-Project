@@ -17,11 +17,14 @@ const Counselors = require('./routes/counselors_routes'); // Importa las rutas d
 const Comments = require('./routes/comments_by_incidents_routes'); // Importa las rutas de los Comentarios
 const Admins = require('./routes/admins_routes'); // Importa las rutas de los Admins
 const Incidents = require('./routes/incidents_routes'); // Importa las rutas de los Admins
+const cors=require('cors')
 
 const app = express();
 const PORT = 3000;
 
 app.use(express.json()); // Middleware para parsear JSON
+
+app.use(cors()); //Activar Cors
 
 // Probar la conexión con la base de datos
 sequelize.authenticate()
