@@ -25,10 +25,14 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      counselor_mail: { 
+      mail: { 
         type: DataTypes.STRING, 
         allowNull: false,
         unique:true,
+      },
+      password: { 
+        type: DataTypes.STRING, 
+        allowNull: false,
       },
       location_id: {
         type: DataTypes.INTEGER,
@@ -38,7 +42,7 @@ module.exports = (sequelize) => {
           key: "id",
         },
       },
-      counselor_phone: { 
+      phone: { 
         type: DataTypes.STRING, 
         allowNull: false,
         unique:true,

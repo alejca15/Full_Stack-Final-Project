@@ -17,12 +17,16 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      admin_mail:{
+      mail:{
         type: Sequelize.STRING,
         allowNull: false,
         unique:true,
       },
-      admin_phone: {
+      password:{
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      phone: {
         type: Sequelize.STRING,
         allowNull: false,
         unique:true,

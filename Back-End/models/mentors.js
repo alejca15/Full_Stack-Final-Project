@@ -29,12 +29,16 @@ module.exports = (sequelize) => {
           key: "id",
         },
       },
-      mentor_mail: {
+      mail: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
       },
-      mentor_phone: {
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      phone: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,

@@ -19,12 +19,16 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull:false
       },
-      admin_mail:{
+      mail:{
         type: DataTypes.STRING,
         allowNull:false,
         unique:true
       },
-      admin_phone:{
+      password:{
+        type: DataTypes.STRING,
+        allowNull:false,
+      },
+      phone:{
         type: DataTypes.STRING,
         allowNull:false,
         unique:true

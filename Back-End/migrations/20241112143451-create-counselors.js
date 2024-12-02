@@ -21,10 +21,14 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      counselor_mail: {
+      mail: {
         type: Sequelize.STRING,
         allowNull: false,
         unique:true,
+      },
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       location_id: {
         type: Sequelize.INTEGER,
@@ -34,7 +38,7 @@ module.exports = {
           key:"id",
         }
       },
-      counselor_phone: {
+      phone: {
         type: Sequelize.STRING,
         allowNull: false,
         unique:true,

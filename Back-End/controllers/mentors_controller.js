@@ -17,15 +17,17 @@ const post_mentor = async (req, res) => {
       mentor_name,
       mentor_lastname,
       location_id,
-      mentor_mail,
-      mentor_phone,
+      mail,
+      password,
+      phone,
     } = req.body;
     const new_mentor = await Mentors.create({
       mentor_name,
       mentor_lastname,
       location_id,
-      mentor_mail,
-      mentor_phone,
+      mail,
+      password,
+      phone,
     });
     res.status(201).json(new_mentor);
   } catch (error) {
@@ -55,8 +57,9 @@ const update_mentor = async (req, res) => {
       mentor_name,
       mentor_lastname,
       location_id,
-      mentor_mail,
-      mentor_phone,
+      mail,
+      password,
+      phone,
     } = req.body;
     const mentor = await Mentors.findByPk(id);
     if (!mentor) {
@@ -66,8 +69,9 @@ const update_mentor = async (req, res) => {
       mentor_name,
       mentor_lastname,
       location_id,
-      mentor_mail,
-      mentor_phone,
+      mail,
+      password,
+      phone,
     });
     res.status(200).json(mentor);
   } catch (error) {

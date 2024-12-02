@@ -44,16 +44,16 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING, 
         allowNull:false 
       },
-      athlete_mail: { 
+      mail: { 
         type: DataTypes.STRING, 
         allowNull:false ,
         unique:true
       },
-      athlete_password: { 
+      password: { 
         type: DataTypes.STRING, 
         allowNull:false ,
       },
-      athlete_phone:{ 
+      phone:{ 
         type: DataTypes.STRING, 
         allowNull:false,
         unique:true
