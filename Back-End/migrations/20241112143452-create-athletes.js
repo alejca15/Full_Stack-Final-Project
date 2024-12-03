@@ -33,12 +33,16 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      athlete_mail: {
+      mail: {
         type: Sequelize.STRING,
         allowNull: false,
         unique:true,
       },
-      athlete_phone: {
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      phone: {
         type: Sequelize.STRING,
         allowNull: false,
         unique:true,

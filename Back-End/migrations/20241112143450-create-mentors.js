@@ -25,13 +25,19 @@ module.exports = {
           key:"id"
         }
       },
-      mentor_mail: {
+     mail: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique:true,
+      },
+      password: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      mentor_phone: {
+      phone: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique:true,
       },
       createdAt: {
         allowNull: false,

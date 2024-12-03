@@ -1,4 +1,6 @@
 const { Counselors } = require("../models");
+const bcrypt=require('bcrypt')
+
 
 //----------------------Get------------------------//
 const get_counselor = async (req, res) => {
@@ -17,17 +19,22 @@ const post_counselor = async (req, res) => {
       counselor_name,
       counselor_first_lastname,
       counselor_second_lastname,
-      counselor_mail,
+      mail,
+      password,
       location_id,
-      counselor_phone,
+      phone,
     } = req.body;
+
+    const hashed_password= await bcrypt.hash(password,10);
+
     const new_counselor = await Counselors.create({
       counselor_name,
       counselor_first_lastname,
       counselor_second_lastname,
-      counselor_mail,
+      mail,
+      password:hashed_password,
       location_id,
-      counselor_phone,
+      phone,
     });
     res.status(201).json(new_counselor);
   } catch (error) {
@@ -58,9 +65,10 @@ const update_counselor = async (req, res) => {
       counselor_name,
       counselor_first_lastname,
       counselor_second_lastname,
-      counselor_mail,
+      mail,
+      password,
       location_id,
-      counselor_phone,
+      phone,
     } = req.body;
     const counselor = await Counselors.findByPk(id);
     if (!counselor) {
@@ -70,9 +78,10 @@ const update_counselor = async (req, res) => {
       counselor_name,
       counselor_first_lastname,
       counselor_second_lastname,
-      counselor_mail,
+      mail,
+      password,
       location_id,
-      counselor_phone,
+      phone,
     });
     res.status(200).json(counselor);
   } catch (error) {

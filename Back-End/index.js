@@ -17,11 +17,16 @@ const Counselors = require('./routes/counselors_routes'); // Importa las rutas d
 const Comments = require('./routes/comments_by_incidents_routes'); // Importa las rutas de los Comentarios
 const Admins = require('./routes/admins_routes'); // Importa las rutas de los Admins
 const Incidents = require('./routes/incidents_routes'); // Importa las rutas de los Admins
+const auth_routes=require("./routes/auth_routes");
+const auth = require('./middlewares/auth_middleware.jsx');
+const cors=require('cors')
 
 const app = express();
 const PORT = 3000;
 
 app.use(express.json()); // Middleware para parsear JSON
+
+app.use(cors()); //Activar Cors
 
 // Probar la conexión con la base de datos
 sequelize.authenticate()
@@ -29,8 +34,7 @@ sequelize.authenticate()
   .catch((error) => console.error('No se pudo conectar a la base de datos:', error));
 
 // Usar las rutas de productos
-
-
+app.use('/auth', auth_routes);
 app.use('/Provinces', Province_route);
 app.use('/Directions', Directions_route);
 app.use('/Cantons', Cantons_route);

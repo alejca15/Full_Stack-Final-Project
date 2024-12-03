@@ -1,4 +1,5 @@
 const { Athletes } = require("../models");
+const bcrypt=require('bcrypt')
 
 //----------------------Get------------------------//
 const get_athletes = async (req, res) => {
@@ -21,8 +22,9 @@ const post_athletes = async (req, res) => {
       birthday,
       nationality,
       gender,
-      athlete_mail,
-      athlete_phone,
+      mail,
+      password,
+      phone,
       blood_type,
       address_id,
       dominant_side,
@@ -38,8 +40,9 @@ const post_athletes = async (req, res) => {
       !birthday ||
       !nationality ||
       !gender ||
-      !athlete_mail ||
-      !athlete_phone ||
+      !mail ||
+      !password||
+      !phone ||
       !blood_type ||
       !address_id ||
       !dominant_side ||
@@ -50,6 +53,9 @@ const post_athletes = async (req, res) => {
     ) {
       return res.status(400).json({ error: "Faltan campos obligatorios" });
     }
+
+    const hashed_password= await bcrypt.hash(password,10);
+
     const athlete = await Athletes.create({
       athlete_name,
       athlete_first_lastname,
@@ -57,8 +63,9 @@ const post_athletes = async (req, res) => {
       birthday,
       nationality,
       gender,
-      athlete_mail,
-      athlete_phone,
+      mail,
+      password:hashed_password,
+      phone,
       blood_type,
       address_id,
       dominant_side,
@@ -67,7 +74,7 @@ const post_athletes = async (req, res) => {
       addition_date,
       athlete_status,
     });
-    res.status(201).json(athlete);
+    res.status(201).json({ id: athlete.id });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al añadir el atleta" });
@@ -101,8 +108,9 @@ const update_athlete = async (req, res) => {
       birthday,
       nationality,
       gender,
-      athlete_mail,
-      athlete_phone,
+      mail,
+      password,
+      phone,
       blood_type,
       address_id,
       dominant_side,
@@ -124,8 +132,9 @@ const update_athlete = async (req, res) => {
       birthday,
       nationality,
       gender,
-      athlete_mail,
-      athlete_phone,
+      mail,
+      password,
+      phone,
       blood_type,
       address_id,
       dominant_side,

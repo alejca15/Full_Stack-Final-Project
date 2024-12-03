@@ -44,12 +44,16 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING, 
         allowNull:false 
       },
-      athlete_mail: { 
+      mail: { 
         type: DataTypes.STRING, 
         allowNull:false ,
         unique:true
       },
-      athlete_phone:{ 
+      password: { 
+        type: DataTypes.STRING, 
+        allowNull:false ,
+      },
+      phone:{ 
         type: DataTypes.STRING, 
         allowNull:false,
         unique:true
@@ -79,8 +83,8 @@ module.exports = (sequelize) => {
         allowNull:false 
       },
       addition_date: { 
-        type: DataTypes.DATE, 
-        allowNull:false 
+        type: DataTypes.DATEONLY, 
+        allowNull: false 
       },
       athlete_status:{ 
         type: DataTypes.STRING, 

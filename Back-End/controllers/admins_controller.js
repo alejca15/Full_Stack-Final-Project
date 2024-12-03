@@ -1,4 +1,6 @@
 const { Admins } = require("../models");
+const bcrypt=require('bcrypt')
+
 
 //----------------------Get------------------------//
 const get_admins = async (req, res) => {
@@ -18,13 +20,18 @@ const post_admins = async (req, res) => {
     const {
       admin_name,
       admin_lastname,
-      admin_mail,
+      mail,
+      password,
       admin_phone,
     } = req.body;
+
+    const hashed_password= await bcrypt.hash(password,10);
+
     const new_admin = await Admins.create({
       admin_name,
       admin_lastname,
-      admin_mail,
+      mail,
+      password:hashed_password,
       admin_phone,
     });
     res.status(201).json(new_admin);
@@ -56,7 +63,8 @@ const update_admins = async (req, res) => {
     const {
       admin_name,
       admin_lastname,
-      admin_mail,
+      mail,
+      password,
       admin_phone,
     } = req.body;
     const admins = await Admins.findByPk(id);
@@ -66,7 +74,8 @@ const update_admins = async (req, res) => {
     await admins.update({
       admin_name,
       admin_lastname,
-      admin_mail,
+      mail,
+      password,
       admin_phone,
     });
     res.status(200).json(admin_name);

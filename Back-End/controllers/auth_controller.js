@@ -1,0 +1,83 @@
+const axios = require("axios");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const { jwtSecret, jwtExpiresIn } = require("../config");
+
+const iniciarSesion = async (req, res) => {
+  const { mail_usuario, contra_usuario } = req.body;
+  let role = "";
+  try {
+    // Buscar el usuario por su nombre de usuario
+    const [Athlete, Mentor, Counselor, Admin] = await Promise.all([
+      axios.get(`http://localhost:3000/Athletes`),
+      axios.get(`http://localhost:3000/Mentors`),
+      axios.get(`http://localhost:3000/Counselors`),
+      axios.get(`http://localhost:3000/Admins`),
+    ]);
+
+    //Validamos si es Atleta
+    const is_Athlete = Athlete.data.find((user) => {
+      if (user.mail === mail_usuario) {
+        role = "Athlete";
+        return user;
+      }
+    });
+
+    //Validamos si es Mentor
+    const is_Mentor = Mentor.data.find((user) => {
+      if (user.mail === mail_usuario) {
+        role = "Mentor";
+        return user;
+      }
+    });
+
+    //Validamos si es Counselor
+    const is_Counselor = Counselor.data.find((user) => {
+      if (user.mail === mail_usuario) {
+        role = "Counselor";
+        return user;
+      }
+    });
+
+    //Validamos si es Admin
+    const is_Admin = Admin.data.find((user) => {
+      if (user.mail === mail_usuario) {
+        role = "Admin";
+        return user;
+      }
+    });
+
+    const usuario=is_Athlete||is_Mentor||is_Counselor||is_Admin
+
+    if (!usuario) {
+      return console.log("El usuario no fue encontrado");
+    }
+
+    console.log("El rol es",role,"El usuario es",usuario);
+    
+
+    const esContrasenaValida = await bcrypt.compare(
+      contra_usuario,
+      usuario.password
+    ); 
+    if (!esContrasenaValida) {
+      return res.status(401).json({ message: "Credenciales incorrectas." });
+    }
+    // Generar el token JWT
+    const token = jwt.sign(
+      { id: usuario.id, mail_usuario: usuario.mail_usuario, rol:role },
+      jwtSecret,
+      {
+        expiresIn: jwtExpiresIn,
+      }
+    );
+    res.status(200).json({ token }); 
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al iniciar sesion." });
+  }
+};
+
+module.exports = {
+  iniciarSesion,
+};

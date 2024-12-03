@@ -14,6 +14,7 @@ const get_athlete_sizes = async (req, res) => {
 //----------------------Post------------------------//
 const post_athletes_sizes = async (req, res) => {
   try {
+    console.log(req.body); 
     const { shoe_sizes_id, shirt_sizes_id, athlete_id } = req.body;
     if (!shoe_sizes_id || !shirt_sizes_id || !athlete_id) {
       return res.status(400).json({ error: "Faltan campos obligatorios" });
