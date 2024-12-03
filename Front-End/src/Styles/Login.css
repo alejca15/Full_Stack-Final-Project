@@ -232,11 +232,12 @@
 #login_credentials_container Button{
     grid-row: 3;
     width: 25%;
-    height: 30%;
+    height: 60%;
     display: flex;
     flex-direction: column;
     justify-self: center;
     align-self: flex-start;
+    margin-top: 20px;
 }
 
 #password_input_container input{

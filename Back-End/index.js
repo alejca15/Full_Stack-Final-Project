@@ -34,7 +34,6 @@ sequelize.authenticate()
   .catch((error) => console.error('No se pudo conectar a la base de datos:', error));
 
 // Usar las rutas de productos
-
 app.use('/auth', auth_routes);
 app.use('/Provinces', Province_route);
 app.use('/Directions', Directions_route);

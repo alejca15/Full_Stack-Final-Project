@@ -1,12 +1,11 @@
-let post_Athlete = async (Athlete_Data) => {
-
+let post_login = async (credentials) => {
     try {
-        let response = await fetch("http://localhost:3000/Athletes", {
+        let response = await fetch("http://localhost:3000/auth/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(Athlete_Data),
+            body: JSON.stringify(credentials),
         });
         return await response.json();
     } catch (error) {
@@ -14,4 +13,4 @@ let post_Athlete = async (Athlete_Data) => {
     }
 }
 
-export default post_Athlete;
+export default post_login;

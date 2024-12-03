@@ -6,9 +6,10 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
 import getCantons from "../Services/Cantons_services";
 import post_Direction from "../Services/Directions_services";
-import post_Address from "../Services/Addresses/Post_Address";
-import post_Athlete from "../Services/Athletes/Post_athlete";
-import post_AthleteSizes from "../Services/post_Athlete_size"
+import post_Address from "../Services/Addresses_services";
+import Athlete_services from "../Services/Athlete_services";
+import post_AthleteSizes from "../Services/Athlete_sizes_services";
+
 
 function Register_form() {
   const [validated, setValidated] = useState(false);
@@ -92,16 +93,14 @@ function Register_form() {
     }
   };
 
-  //Funcion para verificar el id del canton
-  const check_canton = () => {
-    console.log(typeof canton);
-  };
 
-  //Funcion que hace el post
+  //Funcion que hace el post del nuevo Atleta, direction y Sizes
   const add_Athlete = async () => {
     const Address_data = {
       direction_name: Address,
     };
+
+    //Obtenemos el id del JSON que acaba de ser posteado
     const direction_JSON = await post_Direction(Address_data);
     const direction_id = direction_JSON.id;
 
@@ -111,11 +110,16 @@ function Register_form() {
       direction_id: parseInt(direction_id),
     };
 
+    //Obtenemos el id del JSON que acaba de ser posteado
     const address_JSON = await post_Address(new_Address);
     const address_id = address_JSON.id;
+
+    //Fecha y formato legible para el post
     const date = new Date();
     const formattedDate = date.toISOString().split("T")[0];
 
+
+    //JSON del Atleta
     const new_Athlete = {
       athlete_name: Name,
       athlete_first_lastname: First_lastname,
@@ -123,9 +127,9 @@ function Register_form() {
       birthday: Birthday,
       nationality: Nationality,
       gender: Gender,
-      athlete_mail: Mail,
-      athlete_password: Password,
-      athlete_phone: Phone,
+      mail: Mail,
+      password: Password,
+      phone: Phone,
       blood_type: Bloodtype,
       address_id: parseInt(address_id),
       dominant_side: Side,
@@ -134,18 +138,18 @@ function Register_form() {
       addition_date: formattedDate,
       athlete_status: "Candidato",
     };
-    console.log("Atleta a añadir",new_Athlete);
-    
-    const posted_athlete = await post_Athlete(new_Athlete);
-    console.log(posted_athlete);
-    const posted_athlete_id=posted_athlete.id;
-    
-    const new_Athlete_size={
-      shoe_sizes_id:Shoesize,
-      shirt_sizes_id:Shirtsize,
-      athlete_id:posted_athlete_id
-    }
-    await post_AthleteSizes(new_Athlete_size)
+
+    //Obtenemos el id del JSON que acaba de ser posteado
+    const posted_athlete = await Athlete_services.post_Athlete(new_Athlete)
+    const posted_athlete_id = posted_athlete.id;
+
+    //Post de la talla su tabla
+    const new_Athlete_size = {
+      shoe_sizes_id: parseInt(Shoesize),
+      shirt_sizes_id: parseInt(Shirtsize),
+      athlete_id: posted_athlete_id,
+    };
+    await post_AthleteSizes(new_Athlete_size);
   };
 
   return (
@@ -203,9 +207,9 @@ function Register_form() {
                   setGender(e.target.value);
                 }}
               >
-                <option value="1">Masculino</option>
-                <option value="2">Femenino</option>
-                <option value="3">Otro</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Otro">Otro</option>
               </Form.Select>
             </Form.Group>
             <Form.Group as={Col} md="3" controlId="validationCustom03">
@@ -428,19 +432,19 @@ function Register_form() {
                   setShoesize(e.target.value);
                 }}
               >
-                <option value={35}>35</option>
-                <option value={36}>36</option>
-                <option value={37}>37</option>
-                <option value={38}>38</option>
-                <option value={39}>39</option>
-                <option value={40}>40</option>
-                <option value={41}>41</option>
-                <option value={42}>42</option>
-                <option value={43}>43</option>
-                <option value={44}>44</option>
-                <option value={45}>45</option>
-                <option value={46}>46</option>
-                <option value={47}>47</option>
+                <option value={1}>35</option>
+                <option value={2}>36</option>
+                <option value={3}>37</option>
+                <option value={4}>38</option>
+                <option value={5}>39</option>
+                <option value={6}>40</option>
+                <option value={7}>41</option>
+                <option value={8}>42</option>
+                <option value={9}>43</option>
+                <option value={10}>44</option>
+                <option value={11}>45</option>
+                <option value={12}>46</option>
+                <option value={13}>47</option>
               </Form.Select>
             </Form.Group>
             <Form.Group

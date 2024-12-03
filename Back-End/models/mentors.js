@@ -8,9 +8,9 @@ module.exports = (sequelize) => {
       this.hasMany(models.Comments_by_incidents, { foreignKey: "mentor_id" });
       //Belongs To Many
       this.belongsToMany(models.Athletes, { through: "mentors_by_athlete", foreignKey: "mentor_id" });
-    }
-    
-  }
+    } 
+  };
+
   Mentors.init(
     {
       mentor_name: {

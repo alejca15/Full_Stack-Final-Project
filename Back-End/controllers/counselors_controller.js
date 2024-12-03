@@ -1,4 +1,6 @@
 const { Counselors } = require("../models");
+const bcrypt=require('bcrypt')
+
 
 //----------------------Get------------------------//
 const get_counselor = async (req, res) => {
@@ -22,12 +24,15 @@ const post_counselor = async (req, res) => {
       location_id,
       phone,
     } = req.body;
+
+    const hashed_password= await bcrypt.hash(password,10);
+
     const new_counselor = await Counselors.create({
       counselor_name,
       counselor_first_lastname,
       counselor_second_lastname,
       mail,
-      password,
+      password:hashed_password,
       location_id,
       phone,
     });
