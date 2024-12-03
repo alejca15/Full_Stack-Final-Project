@@ -1,0 +1,22 @@
+.Home_body{
+    border: 2px solid red;
+    width: 100%;
+    min-height: 100vh;
+    display: grid;
+    grid-template: 80px 1fr 200px / 200px 1fr 1fr ;
+}
+
+
+#Sidetab_container{
+    grid-row: 2/4;
+    grid-column: 1;
+    background-color: blue;
+}
+
+/*----------------------------Nav---------------------------------*/
+#Nav_container{
+    grid-row: 1;
+    grid-column: 1/4;
+    border: 1px solid green;
+}
+
