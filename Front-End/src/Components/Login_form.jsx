@@ -22,13 +22,10 @@ function Login_form() {
     //Resultado y manejo del Token
     if (encrypted_token_JSON && encrypted_token_JSON.token) {
       const token = encrypted_token_JSON.token;
-
-      const decodedToken_promise = jwtDecode(token);
-
-      const decodedToken = decodedToken_promise.payload; //Se guarda el valor del Obj en la variable
-      sessionStorage.setItem("Token", JSON.stringify(decodedToken));
+      sessionStorage.setItem("Token", token);
       navigate("/Home")
     }
+    
   };
 
   return (

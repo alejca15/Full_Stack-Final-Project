@@ -1,3 +1,5 @@
+import axios from "axios";
+
 let post_Address = async (Address_data) => {
 
     try {
@@ -14,4 +16,17 @@ let post_Address = async (Address_data) => {
     }
 }
 
-export default post_Address;
+
+//----------------------------------Get-------------------------------//
+const get_Adresses = async () => {
+    try {
+        const response = await axios.get("http://localhost:3000/Addresses");
+        return response.data; 
+    } catch (error) {
+        console.error("Error fetching Addresses:", error);
+        throw error;
+    }
+};
+
+
+export default {post_Address,get_Adresses};
