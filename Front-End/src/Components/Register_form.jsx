@@ -33,7 +33,7 @@ function Register_form() {
   const [Shoesize, setShoesize] = useState("");
   const [Shirtsize, setShirtsize] = useState("");
 
-  // Función para manejar el envío del formulario
+  // Función para manejar el envío del formularioz
   const handleSubmit = (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
@@ -234,7 +234,6 @@ function Register_form() {
                 size="sm"
                 style={{ width: "7rem" }}
                 aria-label="Default select example"
-                hg
                 id="Select"
                 onChange={Select_province}
               >
