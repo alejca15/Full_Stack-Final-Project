@@ -5,7 +5,7 @@ const { jwtSecret, jwtExpiresIn } = require("../config");
 
 const iniciarSesion = async (req, res) => {
   const { mail_usuario, contra_usuario } = req.body;
-  let role = "";
+  let Table_name = "";
   try {
     // Buscar el usuario por su nombre de usuario
     const [Athlete, Mentor, Counselor, Admin] = await Promise.all([
@@ -18,7 +18,7 @@ const iniciarSesion = async (req, res) => {
     //Validamos si es Atleta
     const is_Athlete = Athlete.data.find((user) => {
       if (user.mail === mail_usuario) {
-        role = "Athlete";
+        Table_name = "Athletes";
         return user;
       }
     });
@@ -26,7 +26,7 @@ const iniciarSesion = async (req, res) => {
     //Validamos si es Mentor
     const is_Mentor = Mentor.data.find((user) => {
       if (user.mail === mail_usuario) {
-        role = "Mentor";
+        Table_name = "Mentors";
         return user;
       }
     });
@@ -34,7 +34,7 @@ const iniciarSesion = async (req, res) => {
     //Validamos si es Counselor
     const is_Counselor = Counselor.data.find((user) => {
       if (user.mail === mail_usuario) {
-        role = "Counselor";
+        Table_name = "Counselors";
         return user;
       }
     });
@@ -42,7 +42,7 @@ const iniciarSesion = async (req, res) => {
     //Validamos si es Admin
     const is_Admin = Admin.data.find((user) => {
       if (user.mail === mail_usuario) {
-        role = "Admin";
+        Table_name = "Admins";
         return user;
       }
     });
@@ -53,9 +53,6 @@ const iniciarSesion = async (req, res) => {
       return console.log("El usuario no fue encontrado");
     }
 
-    console.log("El rol es",role,"El usuario es",usuario);
-    
-
     const esContrasenaValida = await bcrypt.compare(
       contra_usuario,
       usuario.password
@@ -65,7 +62,7 @@ const iniciarSesion = async (req, res) => {
     }
     // Generar el token JWT
     const token = jwt.sign(
-      { id: usuario.id, mail_usuario: usuario.mail_usuario, rol:role },
+      { id: usuario.id, Rol: Table_name },
       jwtSecret,
       {
         expiresIn: jwtExpiresIn,
