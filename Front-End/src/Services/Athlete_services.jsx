@@ -58,5 +58,44 @@ const get_candidates = async () => {
     }
   };
 
+  //----------------------------------Put-------------------------------//
+const updateAthlete = async (athleteData) => {
+  try {
+    const id=athleteData.id;
+    const response = await axios.put(
+      `http://localhost:3000/Athletes/${id}`,
+      athleteData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating athlete with ID ${id}:`, error);
+    throw error;
+  }
+};
 
-export default { post_Athlete, getAthletes,get_accepted_athletes,get_candidates };
+//----------------------------------Delete-------------------------------//
+const deleteAthlete = async (id) => {
+  try {
+    const response = await axios.delete(
+      `http://localhost:3000/Athletes/${id}`
+    );
+    return response.status === 204 ? "Atleta eliminado con éxito" : null;
+  } catch (error) {
+    console.error(`Error deleting athlete with ID ${id}:`, error);
+    throw error;
+  }
+};
+
+export default {
+  post_Athlete,
+  getAthletes,
+  get_accepted_athletes,
+  get_candidates,
+  updateAthlete,
+  deleteAthlete,
+};

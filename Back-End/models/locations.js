@@ -9,6 +9,7 @@ module.exports = (sequelize) => {
       this.belongsTo(models.Addresses, { foreignKey: "address_id" });
       //Has many
       this.hasMany(models.Counselors, { foreignKey: "location_id" });
+      this.hasMany(models.Athletes, { foreignKey: "location_id" });
     }
     
   }

@@ -6,6 +6,7 @@ module.exports = (sequelize) => {
       //--------Relaciones-------//
       //Belongs To
       this.belongsTo(models.Addresses, { foreignKey: "address_id" });
+      this.belongsTo(models.Locations, { foreignKey: "location_id" });
       //Has many
       this.hasMany(models.Athlete_records, { foreignKey: "athlete_id" });
       this.hasMany(models.Comments_by_incidents, { foreignKey: "athlete_id" });
@@ -85,6 +86,14 @@ module.exports = (sequelize) => {
       addition_date: { 
         type: DataTypes.DATEONLY, 
         allowNull: false 
+      },
+      location_id:{ 
+        type: DataTypes.INTEGER, 
+        allowNull:false,
+        references:{
+          model:"Locations",
+          key:"id"
+        }
       },
       athlete_status:{ 
         type: DataTypes.STRING, 

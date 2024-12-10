@@ -1,17 +1,28 @@
+import axios from "axios";
+
+//-----------------------Post----------------------------//
 let post_Direction = async (Direction_data) => {
+  try {
+    const response = await axios.post("http://localhost:3000/Directions", Direction_data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data; 
+  } catch (error) {
+    throw error;
+  }
+};
 
+
+//-----------------------Get----------------------------//
+let get_Directions = async () => {
     try {
-        let response = await fetch("http://localhost:3000/Directions", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(Direction_data),
-        });
-        return await response.json();
+      const response = await axios.get("http://localhost:3000/Directions");
+      return response.data;
     } catch (error) {
-        throw error;
+      throw error;
     }
-}
-
-export default post_Direction;
+  };
+  
+  export default { post_Direction, get_Directions };

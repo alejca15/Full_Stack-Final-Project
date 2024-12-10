@@ -9,6 +9,8 @@ let post_login = async (credentials) => {
         });
         return await response.json();
     } catch (error) {
+        console.error(error);
+        
         throw error;
     }
 }

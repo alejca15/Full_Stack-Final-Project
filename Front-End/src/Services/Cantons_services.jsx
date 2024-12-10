@@ -1,12 +1,12 @@
+import axios from "axios";
+
 let getCantons = async () => {
-    return new Promise(async (resolve, reject) => {
-        let response = await fetch("http://localhost:3000/Cantons");
-        if (response) {
-            let car = await response.json();
-            return resolve(car);
-        }
-        else return reject(new Error("Fetch was not possible"))
-    });
+  try {
+    const response = await axios.get("http://localhost:3000/Cantons");
+    return response.data;
+  } catch (error) {
+    throw new Error("No fue posible obtener los cantones: " + error.message);
+  }
 };
 
 export default getCantons;

@@ -75,6 +75,14 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      location_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references:{
+          model:"Locations",
+          key:"id",
+        },
+      },
       athlete_status: {
         type: Sequelize.STRING,
         allowNull: false,

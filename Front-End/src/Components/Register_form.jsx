@@ -32,6 +32,7 @@ function Register_form() {
   const [Address, setAddress] = useState("");
   const [Shoesize, setShoesize] = useState("");
   const [Shirtsize, setShirtsize] = useState("");
+  const [Location,setLocation]=useState("");
 
   // Función para manejar el envío del formularioz
   const handleSubmit = (event) => {
@@ -136,6 +137,7 @@ function Register_form() {
       education_entity: Educational_institution,
       actual_grade: Grade,
       addition_date: formattedDate,
+      location_id: Location,
       athlete_status: "Candidato",
     };
 
@@ -244,6 +246,26 @@ function Register_form() {
                 <option value="5">Guanacaste</option>
                 <option value="6">Puntarenas</option>
                 <option value="7">Limón</option>
+              </Form.Select>
+            </Form.Group>
+            <Form.Group
+              id="Select"
+              as={Col}
+              md="2"
+              controlId="validationCustom17"
+            >
+              <Form.Label>Sede</Form.Label>
+              <Form.Select
+                size="sm"
+                style={{ width: "7rem" }}
+                aria-label="Default select example"
+                id="Select"
+                onChange={(e)=>{setLocation(e.target.value)}}
+              >
+                <option value={1}>San José</option>
+                <option value={2}>Sarchí</option>
+                <option value={3}>Guapiles</option>
+                <option value={4}>Paraíso</option>
               </Form.Select>
             </Form.Group>
             <Form.Group as={Col} md="2" controlId="validationCustom05">
