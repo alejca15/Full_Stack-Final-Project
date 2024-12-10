@@ -31,6 +31,7 @@ const post_athletes = async (req, res) => {
       education_entity,
       actual_grade,
       addition_date,
+      location_id,
       athlete_status,
     } = req.body;
     if (
@@ -49,6 +50,7 @@ const post_athletes = async (req, res) => {
       !education_entity ||
       !actual_grade ||
       !addition_date ||
+      !location_id||
       !athlete_status
     ) {
       return res.status(400).json({ error: "Faltan campos obligatorios" });
@@ -72,6 +74,7 @@ const post_athletes = async (req, res) => {
       education_entity,
       actual_grade,
       addition_date,
+      location_id,
       athlete_status,
     });
     res.status(201).json({ id: athlete.id });
@@ -117,6 +120,7 @@ const update_athlete = async (req, res) => {
       education_entity,
       actual_grade,
       addition_date,
+      location_id,
       athlete_status,
     } = req.body;
 
@@ -141,6 +145,7 @@ const update_athlete = async (req, res) => {
       education_entity,
       actual_grade,
       addition_date,
+      location_id,
       athlete_status,
     });
 

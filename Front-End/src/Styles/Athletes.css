@@ -8,14 +8,141 @@
 #switch_cont{
     grid-row: 1;
     display: flex;
-    align-items: center;
-    justify-content: end;
-    border: 1px solid red;
+    background-color: rgb(206, 20, 20);
     height: 100%;
     width: 100%;
+    color: white;
 }
+#switch{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 20px;
+}
+
+/*-------------------Candidates---------------------*/
 
 #Candidates_cont{
     grid-row: 2;
-    border: 1px solid blue;
+}
+
+#candidate_card{
+    border-bottom: 1px solid rgb(175, 174, 174);
+    display: grid;
+    grid-template-columns: 80% 1fr;
+    height: 60px;
+    background-color: rgb(227, 227, 227);
+}
+
+#candidate_card button{
+    display: flex;
+    height: 30px;
+    border-style: none;
+    border: 1px solid rgb(194, 193, 193);
+    align-self: center;
+    justify-self: end;
+}
+
+#btns_container{
+    width: 100%;
+    grid-column: 2;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#Accordion{
+    background-color: rgb(216, 216, 216);
+}
+
+#Accordion_info{
+    background-color: rgb(227, 227, 227);
+}
+
+/*-------------------Athletes---------------------*/
+#athletes_card_cont{
+    grid-row: 2;
+    justify-content: space-evenly;
+}
+#Accordion_athlete{
+    background-color: rgba(2, 40, 111, 0.928);
+    color: white;
+    border-radius: 0px;
+}
+#Athlete_acordion_tab{
+    background-color: rgb(225, 225, 225);
+    color: white;
+}
+
+#athlete_tab_accordion{
+    display: grid;
+    grid-template-columns: 20% 30% 1fr 15%;
+    width: 100%;
+    color: black;
+}
+
+#name_paragraph{
+    display: flex;
+    grid-column: 1;
+    justify-content: center;
+}
+#contact_paragraph{
+    grid-column: 2;
+    display: flex;
+    justify-content: center;
+}
+
+#medical_icon{
+    display: flex;
+    justify-content: center;
+    color: rgb(2, 33, 145);
+}
+#grades_icon{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    color: rgb(2, 33, 145);
+}
+
+#Athlete_accordion_info{
+    background-color: rgb(198, 198, 198);
+    height: 200px;
+    width: 100%;
+}
+
+#Column_tab{
+    width: 100%;
+    height: 50px;
+    background-color: rgb(199, 199, 199);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    color: rgb(35, 35, 35);
+    font-family: "Open Sans", sans-serif;
+}
+#Column_tab p{
+    display: flex;
+    flex-direction: row;
+    align-self: center;
+    margin-top: 10px;
+}
+
+/*-----------------------Font------------------------*/
+.open-sans-regular {
+    font-family: "Open Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400; 
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+}
+
+#candidate_info_cont {
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    grid-column: 1;
+    display: flex;
+    flex-direction: row;
+    font-family: "Open Sans", sans-serif;
 }
