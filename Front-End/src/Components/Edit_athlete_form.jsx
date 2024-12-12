@@ -17,7 +17,7 @@ const validationSchema = yup.object({
 });
 
 const Edit_athlete_form = ({User}) => {
-  console.log(User);
+  
   
   const formik = useFormik({
     initialValues: {
@@ -37,7 +37,6 @@ const Edit_athlete_form = ({User}) => {
           id="Name"
           name="Name"
           label="Nombre"
-          defaultValue={User.athlete_name}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={formik.touched.email && Boolean(formik.errors.email)}

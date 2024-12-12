@@ -13,7 +13,6 @@ module.exports = (sequelize) => {
       this.hasMany(models.Incidents, { foreignKey: "athlete_id" });
       this.hasMany(models.Parents, { foreignKey: "athlete_id" });
       //Belongs To Many
-      this.belongsToMany(models.Mentors, { through: "mentors_by_athlete", foreignKey: "athlete_id" });
       this.belongsToMany(models.Shirt_sizes, { through: "Athlete_sizes", foreignKey: "athlete_id" });
       this.belongsToMany(models.Shoe_sizes, { through: "Athlete_sizes", foreignKey: "athlete_id" });
     }
