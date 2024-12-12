@@ -153,7 +153,7 @@ const Candidates_tab = ({ Switch_Tab }) => {
   };
 
   return (
-    <div id="Athletes_cont">
+    <div style={{ padding: 5 }} id="Athletes_cont">
       <div id="switch_cont">
         <div id="switch">
           Atletas

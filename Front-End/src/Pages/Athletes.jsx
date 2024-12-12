@@ -34,7 +34,6 @@ const Athletes = () => {
   const Decoded_token = jwtDecode(Encrypted_token);
   const Token_JSON = Decoded_token.payload;
   const Table_name = Token_JSON.Rol;
-  console.log(Token_JSON);
 
   const Load_user_logged = async () => {
     const serviceMap = {
