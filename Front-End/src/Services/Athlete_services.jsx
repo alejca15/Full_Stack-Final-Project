@@ -36,7 +36,7 @@ const get_accepted_athletes = async () => {
   try {
     const response = await axios.get("http://localhost:3000/Athletes");
     const accepted_athletes = response.data.filter(
-      (user) => user.athlete_status === "Aceptado"
+      (user) => user.athlete_status === "Activo"
     );
     return accepted_athletes;
   } catch (error) {

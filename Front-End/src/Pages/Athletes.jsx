@@ -1,7 +1,7 @@
 import Navbar from "../Components/Navbar";
 import Sidetab from "../Components/Sidetab";
 import "../Styles/Athletes.css";
-import Athletes_tab from "../Components/Athletes_tab";
+import AthletesTab from "../Components/Athletes_tab";
 import Candidates_tab from "../Components/Candidates";
 import { jwtDecode } from "jwt-js-decode";
 import Athlete_services from "../Services/Athlete_services";
@@ -19,9 +19,9 @@ const Athletes = () => {
  const load_Tab=()=>{
     switch (Tab) {
         case "Athletes":
-          return <Athletes_tab Switch_Tab={showCandidates}/>;
+          return <AthletesTab SwitchTab={showCandidates}/>;
         case "Candidates":
-          return <Candidates_tab Switch_Tab={showAthletes}/>;
+          return <Candidates_tab SwitchTab={showAthletes}/>;
         default:
           break;
       }

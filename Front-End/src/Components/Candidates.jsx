@@ -13,7 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
-const Candidates_tab = ({ Switch_Tab }) => {
+const Candidates_tab = ({ SwitchTab }) => {
   const [Candidates, setCandidates] = useState([]);
   const [Locations, setLocations] = useState([]);
 
@@ -94,9 +94,6 @@ const Candidates_tab = ({ Switch_Tab }) => {
     }
   };
 
-  console.log("Candidatos", Candidates);
-  console.log("Sedes", Locations);
-
   const Candidate_card = (candidate) => {
     return (
       <div key={"Card del usuario" + candidate.id} id="candidate_card">
@@ -153,11 +150,11 @@ const Candidates_tab = ({ Switch_Tab }) => {
   };
 
   return (
-    <div style={{ padding: 5 }} id="Athletes_cont">
+    <div id="Athletes_cont">
       <div id="switch_cont">
         <div id="switch">
           Atletas
-          <Switch {...label} defaultChecked onChange={Switch_Tab} />
+          <Switch {...label} defaultChecked onChange={SwitchTab} />
           Candidatos
         </div>
       </div>

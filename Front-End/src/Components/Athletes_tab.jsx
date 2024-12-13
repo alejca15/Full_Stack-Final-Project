@@ -79,7 +79,7 @@ const AthletesTab = ({ SwitchTab }) => {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: "90%",
-    height: "90%",
+    height: "100&",
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4,
@@ -106,105 +106,40 @@ const AthletesTab = ({ SwitchTab }) => {
     return date.toLocaleDateString("es-ES", options);
   };
 
-  //useEffect para los Atletas
+  //useEffect para Obtener todos los valores
   useEffect(() => {
-    const fetchAthletes = async () => {
+    const fetchData = async () => {
       try {
-        const response = await Athlete_services.getAthletes();
-        if (!response) {
-          return console.log("No se pudieron obtener los atletas");
+        const [athletesResponse, locationsResponse, addressesResponse, directionsResponse, cantonsResponse, parentsResponse] = await Promise.all([
+          Athlete_services.get_accepted_athletes(),
+          Locations_services.get_Locations(),
+          Addresses_services.get_Adresses(),
+          Directions_services.get_Directions(),
+          Cantons_services.getCantons(),
+          Parents_services.get_parents(),
+        ]);
+        
+        if (athletesResponse) setAthletes(athletesResponse);
+        if (locationsResponse) setLocations(locationsResponse);
+        if (addressesResponse) {
+          const addressMap = {};
+          addressesResponse.forEach((address) => {
+            addressMap[address.id] = address;
+          });
+          setUserAddresses(addressMap);
         }
-        setAthletes(response);
+        if (directionsResponse) setDirections(directionsResponse);
+        if (cantonsResponse) setCantons(cantonsResponse);
+        if (parentsResponse) setParents(parentsResponse);
+  
       } catch (error) {
-        console.error("Error al obtener los atletas:", error);
+        console.error("Error fetching data:", error);
       }
     };
-    fetchAthletes();
-  }, []);
-
-   //useEffect para las Sedes
-  useEffect(() => {
-    const fetchLocations = async () => {
-      try {
-        const response = await Locations_services.get_Locations();
-        if (!response) {
-          return console.log("No se pudieron obtener las sedes");
-        }
-        setLocations(response);
-      } catch (error) {
-        console.error("Error al obtener las sedes:", error);
-      }
-    };
-    fetchLocations();
-  }, []);
-
-   //useEffect para las Direcciones
-  useEffect(() => {
-    const fetchAddresses = async () => {
-      try {
-        const response = await Addresses_services.get_Adresses();
-        if (!response) {
-          return console.log("No se pudieron obtener las direcciones");
-        }
-        const addressMap = {};
-        response.forEach((address) => {
-          addressMap[address.id] = address;
-        });
-        setUserAddresses(addressMap);
-      } catch (error) {
-        console.error("Error al obtener las direcciones:", error);
-      }
-    };
-    fetchAddresses();
-  }, []);
-
-   //useEffect para las Direcciones exactas
-  useEffect(() => {
-    const fetchDirections = async () => {
-      try {
-        const response = await Directions_services.get_Directions();
-        if (!response) {
-          return console.log("No se pudieron obtener las direcciones exactas");
-        }
-        setDirections(response);
-      } catch (error) {
-        console.error("Error al obtener las direcciones exactas", error);
-      }
-    };
-    fetchDirections();
-  }, []);
-
-   //useEffect para los Cantones
-  useEffect(() => {
-    const fetchCantons = async () => {
-      try {
-        const response = await Cantons_services.getCantons();
-        if (!response) {
-          return console.log("No se pudieron obtener los cantones");
-        }
-        setCantons(response);
-      } catch (error) {
-        console.error("Error al obtener los cantones", error);
-      }
-    };
-    fetchCantons();
-  }, []);
-
-   //useEffect para los Padres o Encargados
-  useEffect(() => {
-    const fetchParents = async () => {
-      try {
-        const response = await Parents_services.get_parents();
-        if (!response) {
-          return console.log("No se pudieron obtener los padres o encargados");
-        }
-        setParents(response);
-      } catch (error) {
-        console.error("Error al obtener los padres o encargados:", error);
-      }
-    };
-    fetchParents();
-  }, []);
+  
+    fetchData();
+  }, []); 
+  
 
 
   //Funcion que crea el contenedor de padres

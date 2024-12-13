@@ -239,13 +239,13 @@ function Register_form() {
                 id="Select"
                 onChange={Select_province}
               >
-                <option value="1">San José</option>
-                <option value="4">Heredia</option>
-                <option value="2">Alajuela</option>
-                <option value="3">Cartago</option>
-                <option value="5">Guanacaste</option>
-                <option value="6">Puntarenas</option>
-                <option value="7">Limón</option>
+                <option value={1}>San José</option>
+                <option value={4}>Heredia</option>
+                <option value={2}>Alajuela</option>
+                <option value={3}>Cartago</option>
+                <option value={5}>Guanacaste</option>
+                <option value={6}>Puntarenas</option>
+                <option value={7}>Limón</option>
               </Form.Select>
             </Form.Group>
             <Form.Group
