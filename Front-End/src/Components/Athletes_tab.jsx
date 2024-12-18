@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-js-decode";
 import Athlete_services from "../Services/Athlete_services";
@@ -15,11 +15,11 @@ import Cantons_services from "../Services/Cantons_services";
 import Parents_services from "../Services/Parents_services";
 import Switch from "@mui/material/Switch";
 import Button from "@mui/material/Button";
-import Backdrop from '@mui/material/Backdrop';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import Fade from '@mui/material/Fade';
-import Edit_athlete_form from "../Components/Edit_athlete_form"
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Fade from "@mui/material/Fade";
+import Edit_athlete_form from "../Components/Edit_athlete_form";
 import Mentors_services from "../Services/Mentors_services";
 import Admins_services from "../Services/Admins_services";
 import Counselors_services from "../Services/Counselors_services";
@@ -27,7 +27,6 @@ import Counselors_services from "../Services/Counselors_services";
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
 const AthletesTab = ({ SwitchTab }) => {
-
   //Hooks
   const [athletes, setAthletes] = useState([]);
   const [locations, setLocations] = useState([]);
@@ -35,10 +34,14 @@ const AthletesTab = ({ SwitchTab }) => {
   const [directions, setDirections] = useState([]);
   const [userAddresses, setUserAddresses] = useState({});
   const [parents, setParents] = useState([]);
+  const [selected_athlete, setSelected_athlete] = useState({});
 
   //Manejo del modal
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = (Athlete) => {
+    setSelected_athlete(Athlete)
+    setOpen(true);
+  };
   const handleClose = () => setOpen(false);
 
   //Obtener el valor del token
@@ -74,17 +77,17 @@ const AthletesTab = ({ SwitchTab }) => {
 
   //Estilos para el modal
   const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: "90%",
-    height: "100&",
-    bgcolor: 'background.paper',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "95%",
+    height: "90%",
+    bgcolor: "background.paper",
     boxShadow: 24,
     p: 4,
   };
-  
+
   const provinces = {
     1: "San José",
     2: "Alajuela",
@@ -110,7 +113,14 @@ const AthletesTab = ({ SwitchTab }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [athletesResponse, locationsResponse, addressesResponse, directionsResponse, cantonsResponse, parentsResponse] = await Promise.all([
+        const [
+          athletesResponse,
+          locationsResponse,
+          addressesResponse,
+          directionsResponse,
+          cantonsResponse,
+          parentsResponse,
+        ] = await Promise.all([
           Athlete_services.get_accepted_athletes(),
           Locations_services.get_Locations(),
           Addresses_services.get_Adresses(),
@@ -118,7 +128,7 @@ const AthletesTab = ({ SwitchTab }) => {
           Cantons_services.getCantons(),
           Parents_services.get_parents(),
         ]);
-        
+
         if (athletesResponse) setAthletes(athletesResponse);
         if (locationsResponse) setLocations(locationsResponse);
         if (addressesResponse) {
@@ -131,16 +141,13 @@ const AthletesTab = ({ SwitchTab }) => {
         if (directionsResponse) setDirections(directionsResponse);
         if (cantonsResponse) setCantons(cantonsResponse);
         if (parentsResponse) setParents(parentsResponse);
-  
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-  
-    fetchData();
-  }, []); 
-  
 
+    fetchData();
+  }, []);
 
   //Funcion que crea el contenedor de padres
   const DisplayParents = (athlete) => {
@@ -153,7 +160,13 @@ const AthletesTab = ({ SwitchTab }) => {
         <h6 id="parent_title_h">Encargados</h6>
         <div id="parents_name_cont">
           {athleteParents.map((parent) => (
-            <div key={parent.id ? parent.id : `${parent.parent_name}-${parent.parent_phone}`}>
+            <div
+              key={
+                parent.id
+                  ? parent.id
+                  : `${parent.parent_name}-${parent.parent_phone}`
+              }
+            >
               <p>
                 {parent.parent_name} {parent.parent_first_lastname}{" "}
                 {parent.parent_second_lastname}
@@ -164,7 +177,13 @@ const AthletesTab = ({ SwitchTab }) => {
         <h6 id="parent_phone_title">Contacto</h6>
         <div id="parents_phone_cont">
           {athleteParents.map((parent) => (
-            <div key={parent.phone ? parent.phone : `${parent.parent_name}-${parent.id}`}>
+            <div
+              key={
+                parent.phone
+                  ? parent.phone
+                  : `${parent.parent_name}-${parent.id}`
+              }
+            >
               <p>{parent.parent_phone}</p>
             </div>
           ))}
@@ -197,7 +216,12 @@ const AthletesTab = ({ SwitchTab }) => {
                 if (athlete.location_id === location.id) {
                   const address = userAddresses[athlete.address_id];
                   return (
-                    <Accordion key={athlete.id || `${athlete.athlete_name}-${athlete.phone}`} id="Accordion">
+                    <Accordion
+                      key={
+                        athlete.id || `${athlete.athlete_name}-${athlete.phone}`
+                      }
+                      id="Accordion"
+                    >
                       <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1-content"
@@ -229,9 +253,16 @@ const AthletesTab = ({ SwitchTab }) => {
                           </div>
                           <div>
                             {address && provinces[address.province_id]}, {""}
-                            {address && cantons.find((canton) => canton.id === address.canton_id)?.canton_name}
+                            {address &&
+                              cantons.find(
+                                (canton) => canton.id === address.canton_id
+                              )?.canton_name}
                             , {""}
-                            {address && directions.find((direction) => direction.id === address.direction_id)?.direction_name}
+                            {address &&
+                              directions.find(
+                                (direction) =>
+                                  direction.id === address.direction_id
+                              )?.direction_name}
                           </div>
                         </div>
 
@@ -286,13 +317,18 @@ const AthletesTab = ({ SwitchTab }) => {
                           <p>{athlete.actual_grade}</p>
                         </div>
                         <div id="athlete_picture_cont"></div>
-                        <Button variant="contained"
-                          color="primary" onClick={handleOpen}>Editar Atleta</Button>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={(e)=>{handleOpen(athlete)}}
+                        >
+                          Editar Atleta
+                        </Button>
                       </AccordionDetails>
                     </Accordion>
                   );
                 }
-                return null;
+                return null;  
               })}
             </AccordionDetails>
           </Accordion>
@@ -302,7 +338,7 @@ const AthletesTab = ({ SwitchTab }) => {
   };
 
   return (
-    <div id="Athletes_cont">
+    <div style={{padding:4}} id="Athletes_cont">
       <div id="switch_cont">
         <div id="switch">
           Atletas
@@ -326,8 +362,8 @@ const AthletesTab = ({ SwitchTab }) => {
           }}
         >
           <Fade in={open}>
-            <Box sx={style}>
-              <Edit_athlete_form User={{ ...user_logged }} />
+            <Box id="edit_athlete_form_box" sx={style}>
+              <Edit_athlete_form User={{ ...selected_athlete }} />
             </Box>
           </Fade>
         </Modal>

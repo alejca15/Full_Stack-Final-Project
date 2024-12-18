@@ -14,4 +14,18 @@ let post_AthleteSizes = async (sizes_data) => {
     }
 };
 
-export default post_AthleteSizes;
+//------------------GET-----------------------//
+let get_AthleteSizes = async () => {
+    try {
+        const response = await axios.get("http://localhost:3000/Athletessizes", {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export default { post_AthleteSizes, get_AthleteSizes };
