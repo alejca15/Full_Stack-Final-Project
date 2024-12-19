@@ -1,13 +1,18 @@
 "use strict";
-const { Model } = require("sequelize");
+const {  Model, DataTypes } = require("sequelize");
 module.exports = (sequelize) => {
   class Users extends Model {
     static associate(models) {
+      //Belongs to
+      this.belongsTo(models.Counselors, { foreignKey: "counselor_id" });
+      this.belongsTo(models.Admins, { foreignKey: "admin_id" });
+      this.belongsTo(models.Athletes, { foreignKey: "athlete_id" });
+      this.belongsTo(models.Mentors, { foreignKey: "mentor_id" });
     }
   }
   Users.init(
     {
-      email: {
+      mail: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,

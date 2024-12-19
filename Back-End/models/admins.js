@@ -6,6 +6,7 @@ module.exports = (sequelize) => {
     static associate(models) {
       //--------Relaciones-------//
       //Has many
+      this.hasMany(models.Users, { foreignKey: "admin_id" });
       this.hasMany(models.Comments_by_incidents, { foreignKey: "mentor_id" });
     }
   }
@@ -18,15 +19,6 @@ module.exports = (sequelize) => {
       admin_lastname:{
         type: DataTypes.STRING,
         allowNull:false
-      },
-      mail:{
-        type: DataTypes.STRING,
-        allowNull:false,
-        unique:true
-      },
-      password:{
-        type: DataTypes.STRING,
-        allowNull:false,
       },
       phone:{
         type: DataTypes.STRING,

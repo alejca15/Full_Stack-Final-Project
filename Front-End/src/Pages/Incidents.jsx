@@ -18,7 +18,7 @@ const Incidents = () => {
   const Encrypted_token = sessionStorage.getItem("Token");
   const Decoded_token = jwtDecode(Encrypted_token);
   const Token_JSON = Decoded_token.payload;
-  const Table_name = Token_JSON.Rol;
+  const Rol = Token_JSON.Rol;
 
   const Load_user_logged = async () => {
     const serviceMap = {
@@ -28,14 +28,14 @@ const Incidents = () => {
       Counselors: Counselors_services.get_counselors,
     };
 
-    const selectedService = serviceMap[Table_name];
+    const selectedService = serviceMap[Rol];
 
     if (selectedService) {
       const list = await selectedService();
-      return list.find((user) => user.id === Token_JSON.id);
+      return list.find((user) => user.id === Token_JSON.Table_id);
       
     } else {
-      console.error(`No se encontró el servicio para la tabla: ${Table_name}`);
+      console.error(`No se encontró el servicio para la tabla: ${Rol}`);
     }
   };
 

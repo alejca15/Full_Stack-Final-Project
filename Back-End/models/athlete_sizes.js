@@ -13,6 +13,11 @@ module.exports = (sequelize) => {
   }
   Athlete_sizes.init(
     {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       shoe_sizes_id: {
         type: DataTypes.INTEGER,
         allowNull:false,

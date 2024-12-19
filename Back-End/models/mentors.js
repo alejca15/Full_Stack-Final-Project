@@ -5,6 +5,7 @@ module.exports = (sequelize) => {
     static associate(models) {
       //--------Relaciones-------//
       //Has many
+      this.hasMany(models.Users, { foreignKey: "mentor_id" });
       this.hasMany(models.Comments_by_incidents, { foreignKey: "mentor_id" });
     } 
   };
@@ -26,15 +27,6 @@ module.exports = (sequelize) => {
           model: "Locations",
           key: "id",
         },
-      },
-      mail: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-      },
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
       },
       phone: {
         type: DataTypes.STRING,

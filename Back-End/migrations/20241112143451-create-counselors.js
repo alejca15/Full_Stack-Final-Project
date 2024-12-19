@@ -21,15 +21,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      mail: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique:true,
-      },
-      password: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       location_id: {
         type: Sequelize.INTEGER,
         allowNull: false,

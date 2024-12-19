@@ -59,7 +59,7 @@ const get_candidates = async () => {
   };
 
   //----------------------------------Put-------------------------------//
-const updateAthlete = async (athleteData) => {
+const updateAthlete = async (id,athleteData) => {
   try {
     const id=athleteData.id;
     const response = await axios.put(

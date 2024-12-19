@@ -8,6 +8,7 @@ module.exports = (sequelize) => {
       this.belongsTo(models.Addresses, { foreignKey: "address_id" });
       this.belongsTo(models.Locations, { foreignKey: "location_id" });
       //Has many
+      this.hasMany(models.Users, { foreignKey: "athlete_id" });
       this.hasMany(models.Athlete_records, { foreignKey: "athlete_id" });
       this.hasMany(models.Comments_by_incidents, { foreignKey: "athlete_id" });
       this.hasMany(models.Incidents, { foreignKey: "athlete_id" });
@@ -43,15 +44,6 @@ module.exports = (sequelize) => {
       gender:{ 
         type: DataTypes.STRING, 
         allowNull:false 
-      },
-      mail: { 
-        type: DataTypes.STRING, 
-        allowNull:false ,
-        unique:true
-      },
-      password: { 
-        type: DataTypes.STRING, 
-        allowNull:false ,
       },
       phone:{ 
         type: DataTypes.STRING, 

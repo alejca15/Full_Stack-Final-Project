@@ -23,6 +23,8 @@ import Edit_athlete_form from "../Components/Edit_athlete_form";
 import Mentors_services from "../Services/Mentors_services";
 import Admins_services from "../Services/Admins_services";
 import Counselors_services from "../Services/Counselors_services";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
@@ -36,10 +38,14 @@ const AthletesTab = ({ SwitchTab }) => {
   const [parents, setParents] = useState([]);
   const [selected_athlete, setSelected_athlete] = useState({});
 
+  //Toastify
+  const toastify_password_resseted = () => toast.success("Contraseña restaurada!");
+  const toastify_athlete_updated= () => toast.success("Atleta Editado!");
+
   //Manejo del modal
   const [open, setOpen] = React.useState(false);
   const handleOpen = (Athlete) => {
-    setSelected_athlete(Athlete)
+    setSelected_athlete(Athlete);
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
@@ -48,7 +54,7 @@ const AthletesTab = ({ SwitchTab }) => {
   const Encrypted_token = sessionStorage.getItem("Token");
   const Decoded_token = jwtDecode(Encrypted_token);
   const Token_JSON = Decoded_token.payload;
-  const Table_name = Token_JSON.Rol;
+  const Rol = Token_JSON.Rol;
 
   //Obtener el valor del usuario loggeado
   const [user_logged, setUser_logged] = useState(null);
@@ -60,14 +66,14 @@ const AthletesTab = ({ SwitchTab }) => {
       Counselors: Counselors_services.get_counselors,
     };
 
-    const selectedService = serviceMap[Table_name];
+    const selectedService = serviceMap[Rol];
 
     if (selectedService) {
       const list = await selectedService();
-      const user = list.find((user) => user.id === Token_JSON.id);
+      const user = list.find((user) => user.id === Token_JSON.Table_id);
       setUser_logged(user);
     } else {
-      console.error(`No se encontró el servicio para la tabla: ${Table_name}`);
+      console.error(`No se encontró el servicio para la tabla: ${Rol}`);
     }
   };
 
@@ -113,6 +119,8 @@ const AthletesTab = ({ SwitchTab }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log("hola");
+
         const [
           athletesResponse,
           locationsResponse,
@@ -123,7 +131,7 @@ const AthletesTab = ({ SwitchTab }) => {
         ] = await Promise.all([
           Athlete_services.get_accepted_athletes(),
           Locations_services.get_Locations(),
-          Addresses_services.get_Adresses(),
+          Addresses_services.get_Addresses(),
           Directions_services.get_Directions(),
           Cantons_services.getCantons(),
           Parents_services.get_parents(),
@@ -320,7 +328,9 @@ const AthletesTab = ({ SwitchTab }) => {
                         <Button
                           variant="contained"
                           color="primary"
-                          onClick={(e)=>{handleOpen(athlete)}}
+                          onClick={(e) => {
+                            handleOpen(athlete);
+                          }}
                         >
                           Editar Atleta
                         </Button>
@@ -328,7 +338,7 @@ const AthletesTab = ({ SwitchTab }) => {
                     </Accordion>
                   );
                 }
-                return null;  
+                return null;
               })}
             </AccordionDetails>
           </Accordion>
@@ -338,7 +348,7 @@ const AthletesTab = ({ SwitchTab }) => {
   };
 
   return (
-    <div style={{padding:4}} id="Athletes_cont">
+    <div style={{ padding: 4 }} id="Athletes_cont">
       <div id="switch_cont">
         <div id="switch">
           Atletas
@@ -363,10 +373,11 @@ const AthletesTab = ({ SwitchTab }) => {
         >
           <Fade in={open}>
             <Box id="edit_athlete_form_box" sx={style}>
-              <Edit_athlete_form User={{ ...selected_athlete }} />
+              <Edit_athlete_form User={{ ...selected_athlete }} Resseted_toastify={toastify_password_resseted} Athlete_updated={toastify_athlete_updated} />
             </Box>
           </Fade>
         </Modal>
+        <ToastContainer />
       </div>
     </div>
   );

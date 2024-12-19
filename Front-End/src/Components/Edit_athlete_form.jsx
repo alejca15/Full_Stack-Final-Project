@@ -2,34 +2,29 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {
-  Button,
-  TextField,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
-  Box,
-} from "@mui/material";
+import { Button, TextField, MenuItem, Select, InputLabel, FormControl, Box,} from "@mui/material";
 import Cantons_Services from "../Services/Cantons_services";
 import Directions_services from "../Services/Directions_services";
 import post_Address from "../Services/Addresses_services";
 import Athlete_services from "../Services/Athlete_services";
 import Athlete_sizes_services from "../Services/Athlete_sizes_services";
 import Addresses_services from "../Services/Addresses_services";
+import User_services from "../Services/User_services";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Backdrop from "@mui/material/Backdrop";
 
-const Edit_athlete_form = ({ User }) => {
+const Edit_athlete_form = ({ User,Resseted_toastify,Athlete_updated }) => {
   const [cantons, setCantons] = useState([]);
   const [province, setProvince] = useState(1);
   const [canton, setCanton] = useState("");
   const [Address, setAddress] = useState(null);
   const [Direction, setDirection] = useState(null);
-  const [Athlete_size, setAthlete_size] = useState(null);
   const [Shoe_size, setShoe_size] = useState("34");
   const [Shirt_size, setShirt_size] = useState("XS");
+  const [Athlete, setAthlete] = useState("");
+
+
 
   //Manejo del modal
   const [open, setOpen] = React.useState(false);
@@ -37,6 +32,7 @@ const Edit_athlete_form = ({ User }) => {
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
+
   //Estilos para el modal
   const style = {
     position: "absolute",
@@ -51,6 +47,7 @@ const Edit_athlete_form = ({ User }) => {
     borderRadius: "5px",
   };
 
+  //Tallas de zapatos y camisas
   const shoe_sizes = {
     1: "35",
     2: "36",
@@ -86,6 +83,21 @@ const Edit_athlete_form = ({ User }) => {
     7: "Limón",
   };
 
+  // Cargar el correo del atleta
+  const loadUser = async () => {
+    try {
+      const users = await User_services.get_users();
+      const user_found = users.find((user) => user.athlete_id === User.id);
+      setAthlete(user_found);
+    } catch (error) {
+      console.error("Error loading user mail", error);
+    }
+  };
+
+  useEffect(() => {
+    loadUser();
+  }, [User.id]);
+
   // Cargar cantones basado en la provincia seleccionada
   const loadCantons = async (provinceId) => {
     try {
@@ -107,7 +119,7 @@ const Edit_athlete_form = ({ User }) => {
   // Cargar direcciones para el usuario
   const loadAddresses = async () => {
     try {
-      const Addresses = await Addresses_services.get_Adresses();
+      const Addresses = await Addresses_services.get_Addresses();
       if (Addresses) {
         const userAddress = Addresses.find(
           (address) => address.id === User.address_id
@@ -151,7 +163,7 @@ const Edit_athlete_form = ({ User }) => {
   }, [Address]);
 
   useEffect(() => {
-    if (Address && Direction) {
+    if (Address && Direction) {     
       formik.setValues({
         ...formik.values,
         address: Direction.direction_name,
@@ -169,7 +181,6 @@ const Edit_athlete_form = ({ User }) => {
         (Size) => Size.athlete_id === parseInt(athlete_id)
       );
       if (filtered_size) {
-        setAthlete_size(filtered_size);
         setShoe_size(filtered_size.shoe_sizes_id);
         setShirt_size(filtered_size.shirt_sizes_id);
       }
@@ -180,6 +191,7 @@ const Edit_athlete_form = ({ User }) => {
 
   useEffect(() => {
     loadSizes(User.id);
+    loadAddresses()
   }, [User.id]);
 
   useEffect(() => {
@@ -191,6 +203,12 @@ const Edit_athlete_form = ({ User }) => {
       });
     }
   }, [Shoe_size, Shirt_size]);
+
+  useEffect(() => {
+    if (Athlete) {
+      formik.setFieldValue("mail", Athlete.mail);
+    }
+  }, [Athlete]);
 
   const formik = useFormik({
     initialValues: {
@@ -204,7 +222,7 @@ const Edit_athlete_form = ({ User }) => {
       birthday: User.birthday,
       nationality: User.nationality,
       phone: User.phone,
-      mail: User.mail,
+      mail: Athlete.mail || "",
       password: "",
       educationalInstitution: User.education_entity,
       grade: User.actual_grade,
@@ -227,49 +245,120 @@ const Edit_athlete_form = ({ User }) => {
     }),
     onSubmit: async (values) => {
       try {
-        const addressData = { direction_name: values.address };
-        const directionResponse = await Directions_services.get_Directions()(
-          addressData
-        );
-        const directionId = directionResponse.id;
-
-        const newAddress = {
-          province_id: parseInt(province),
-          canton_id: parseInt(canton),
-          direction_id: directionId,
-        };
-        const addressResponse = await post_Address(newAddress);
-        const addressId = addressResponse.id;
-
-        const newAthlete = {
+        //Put de Direcction
+        if (Direction.direction_name != values.address) {
+          console.log("entre a direccion especifica");
+          
+          Direction.direction_name = values.address;
+          const response = await Directions_services.update_Direction(Direction.id, Direction);
+          if (!response) {
+            console.error("Error al actualizar dirección", error);
+          }
+          else{
+            console.log("Direccion exacta Actualizada");
+            
+          }
+        }
+  
+        //Put de Address
+        console.log("Esto es address",Address);
+        console.log("Esto es Province",province);
+        console.log("Esto es Canton",canton);
+        
+        
+        if (Address.province_id != province || Address.canton_id != canton) {
+          console.log("Entre a Address");
+          Address.province_id = province;
+          Address.canton_id = canton;
+          const response = await post_Address.update_Address(Address.id, Address);
+          if (!response) {
+            console.error("Error al actualizar dirección", error);
+          }
+          else{
+            console.log("Direccion Actualizada");
+          }
+        }
+  
+        //Put de User
+        if (Athlete.mail != values.mail) {
+          Athlete.mail = values.mail;
+          const response = await User_services.update_user(Athlete.id, Athlete);
+          if (!response) {
+            console.error("Error al actualizar correo", error);
+          }
+          else {
+            console.log("Usuario actualizado");
+            
+          }
+        }
+        
+        const athletes_response=await Athlete_services.getAthletes();
+        console.log(athletes_response);
+        
+        //Put de Athlete
+        const updated_athlete = {
+          id: User.id,
           athlete_name: values.name,
           athlete_first_lastname: values.firstLastName,
           athlete_second_lastname: values.secondLastName,
           birthday: values.birthday,
           nationality: values.nationality,
           gender: values.gender,
-          mail: values.mail,
-          password: values.password || User.password,
           phone: values.phone,
           blood_type: values.bloodType,
-          address_id: addressId,
+          address_id: Address.id,
           dominant_side: values.side,
           education_entity: values.educationalInstitution,
           actual_grade: values.grade,
-          athlete_status: "Candidato",
+          addition_date: User.addition_date,
+          location_id: User.location_id,
+          athlete_status: "Activo",
         };
+      
+        const response = await Athlete_services.updateAthlete(updated_athlete.id,updated_athlete);
+        if (!response) {
+          console.error("Error al actualizar el atleta", error);
+        }
+        if (response) {
+          console.log("Atleta actualizado");
+          
+        }
+  
+        //Put de Athlete_sizes
+        const sizes_response = await Athlete_sizes_services.get_AthleteSizes();
+        console.log(sizes_response);
+        
+        if (!sizes_response) {
+          console.error(error);
+          throw error;
+        } else {
+          const sizes_found = sizes_response.find(size => size.athlete_id === User.id);
+          if (!sizes_found) {
+            const new_sizes = {
+              athlete_id: User.id,
+              shoe_sizes_id: values.shoesize,
+              shirt_sizes_id: values.shirtsize
+            };
+            const response = await Athlete_sizes_services.post_AthleteSizes(new_sizes);
+            if (!response) {
+              console.error("Error al actualizar tallas", error);
+            }
+          } else {            
+            sizes_found.shoe_sizes_id = values.shoesize;
+            sizes_found.shirt_sizes_id = values.shirtsize;
+            console.log("Tallas a actualizar",sizes_found);
+            
+            const response = await Athlete_sizes_services.update_AthleteSize(sizes_found.id, sizes_found);
+            if (!response) {
+              console.error("Error al actualizar tallas", error);
+            }
+          }
+        }
 
-        const athleteResponse = await Athlete_services.post_Athlete(newAthlete);
-        const athleteId = athleteResponse.id;
-
-        const newAthleteSize = {
-          shoe_sizes_id: parseInt(values.shoesize),
-          shirt_sizes_id: parseInt(values.shirtsize),
-          athlete_id: athleteId,
-        };
-        await Athlete_sizes_services.post_AthleteSizes(newAthleteSize);
+        return Athlete_updated();
       } catch (error) {
-        console.error("Error registering athlete", error);
+        console.error(error);
+        throw error;
       }
     },
   });
@@ -278,6 +367,26 @@ const Edit_athlete_form = ({ User }) => {
     const selectedProvince = event.target.value;
     setProvince(parseInt(selectedProvince));
   };
+
+  const reset_password=async()=>{
+    try {
+      const updated_user={...Athlete,password:"CRCenduranceOTP"}
+      console.log("usuario a actualizar",updated_user);
+      
+      const response= await User_services.update_user(Athlete.id,updated_user);
+      if (!response) {
+        console.error("Error al resetear contraseña",error);
+      }
+      else{
+        Resseted_toastify();
+        handleClose();
+      }
+    } catch (error) {
+      console.error(error);
+      throw error; 
+    }
+
+  }
 
   return (
     <Box>
@@ -379,7 +488,11 @@ const Edit_athlete_form = ({ User }) => {
                 label="Cantón"
                 name="canton"
                 value={canton}
-                onChange={(e) => setCanton(e.target.value)}
+                onChange={(e) => {                  
+                  setCanton(e.target.value)
+                  console.log(canton);
+                  
+                }}
               >
                 {cantons.map((cantonItem) => (
                   <MenuItem key={cantonItem.id} value={cantonItem.id}>
@@ -484,7 +597,7 @@ const Edit_athlete_form = ({ User }) => {
               handleOpen();
             }}
           >
-            Reiniciar contraseña
+            Restablecer contraseña
           </Button>
         </Box>
 
@@ -611,10 +724,24 @@ const Edit_athlete_form = ({ User }) => {
           <Box id="reset_password_modal" sx={style}>
             <div id="reset_password_modal_content">
               <p>
-                Al aceptar la contraseña será reiniciada a "CRCenduranceOTP"
+                Al aceptar la contraseña será restablecida a "CRCenduranceOTP"
               </p>
-              <Button variant="contained" color="success" id="reset_password_accept_button">Aceptar</Button>
-              <Button  id="reset_password_deny_button" variant="contained" color="error" onClick={handleClose}>Cancelar</Button>
+              <Button
+                variant="contained"
+                color="success"
+                id="reset_password_accept_button"
+                onClick={(e)=>reset_password()}
+              >
+                Aceptar
+              </Button>
+              <Button
+                id="reset_password_deny_button"
+                variant="contained"
+                color="error"
+                onClick={handleClose}
+              >
+                Cancelar
+              </Button>
             </div>
           </Box>
         </Fade>

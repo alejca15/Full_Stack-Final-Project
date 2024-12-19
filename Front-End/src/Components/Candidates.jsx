@@ -75,6 +75,7 @@ const Candidates_tab = ({ SwitchTab }) => {
       throw error;
     }
   };
+
   //Funcion que Deniega Atletas
   const deny_athlete = async (athlete) => {
     try {
@@ -94,6 +95,7 @@ const Candidates_tab = ({ SwitchTab }) => {
     }
   };
 
+  //Funcion que crea las cards de los candidatos
   const Candidate_card = (candidate) => {
     return (
       <div key={"Card del usuario" + candidate.id} id="candidate_card">
@@ -127,7 +129,7 @@ const Candidates_tab = ({ SwitchTab }) => {
     return Locations.map((Location) => {
       return (
         <div>
-          <Accordion id="Accordion">
+          <Accordion id="Accordion" >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1-content"
@@ -150,7 +152,7 @@ const Candidates_tab = ({ SwitchTab }) => {
   };
 
   return (
-    <div id="Athletes_cont">
+    <div style={{padding:4}} id="Athletes_cont">
       <div id="switch_cont">
         <div id="switch">
           Atletas
