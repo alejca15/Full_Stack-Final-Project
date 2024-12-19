@@ -58,10 +58,9 @@ const Candidates_tab = ({ SwitchTab }) => {
 
   //Funcion que acepta Atletas
   const accept_athlete = async (athlete) => {
-    console.log(athlete);
     try {
       athlete.athlete_status = "Activo";
-      const response = await Athlete_services.updateAthlete(athlete);
+      const response = await Athlete_services.updateAthlete(athlete.id,athlete);
       if (!response) {
         console.error(error);
         return console.log("El atleta no pudo ser actualizado");
