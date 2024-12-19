@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-js-decode";
 import Athlete_services from "../Services/Athlete_services";
@@ -15,19 +15,20 @@ import Cantons_services from "../Services/Cantons_services";
 import Parents_services from "../Services/Parents_services";
 import Switch from "@mui/material/Switch";
 import Button from "@mui/material/Button";
-import Backdrop from '@mui/material/Backdrop';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import Fade from '@mui/material/Fade';
-import Edit_athlete_form from "../Components/Edit_athlete_form"
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Fade from "@mui/material/Fade";
+import Edit_athlete_form from "../Components/Edit_athlete_form";
 import Mentors_services from "../Services/Mentors_services";
 import Admins_services from "../Services/Admins_services";
 import Counselors_services from "../Services/Counselors_services";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
 const AthletesTab = ({ SwitchTab }) => {
-
   //Hooks
   const [athletes, setAthletes] = useState([]);
   const [locations, setLocations] = useState([]);
@@ -35,17 +36,25 @@ const AthletesTab = ({ SwitchTab }) => {
   const [directions, setDirections] = useState([]);
   const [userAddresses, setUserAddresses] = useState({});
   const [parents, setParents] = useState([]);
+  const [selected_athlete, setSelected_athlete] = useState({});
+
+  //Toastify
+  const toastify_password_resseted = () => toast.success("Contraseña restaurada!");
+  const toastify_athlete_updated= () => toast.success("Atleta Editado!");
 
   //Manejo del modal
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = (Athlete) => {
+    setSelected_athlete(Athlete);
+    setOpen(true);
+  };
   const handleClose = () => setOpen(false);
 
   //Obtener el valor del token
   const Encrypted_token = sessionStorage.getItem("Token");
   const Decoded_token = jwtDecode(Encrypted_token);
   const Token_JSON = Decoded_token.payload;
-  const Table_name = Token_JSON.Rol;
+  const Rol = Token_JSON.Rol;
 
   //Obtener el valor del usuario loggeado
   const [user_logged, setUser_logged] = useState(null);
@@ -57,14 +66,14 @@ const AthletesTab = ({ SwitchTab }) => {
       Counselors: Counselors_services.get_counselors,
     };
 
-    const selectedService = serviceMap[Table_name];
+    const selectedService = serviceMap[Rol];
 
     if (selectedService) {
       const list = await selectedService();
-      const user = list.find((user) => user.id === Token_JSON.id);
+      const user = list.find((user) => user.id === Token_JSON.Table_id);
       setUser_logged(user);
     } else {
-      console.error(`No se encontró el servicio para la tabla: ${Table_name}`);
+      console.error(`No se encontró el servicio para la tabla: ${Rol}`);
     }
   };
 
@@ -74,17 +83,17 @@ const AthletesTab = ({ SwitchTab }) => {
 
   //Estilos para el modal
   const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: "90%",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "95%",
     height: "90%",
-    bgcolor: 'background.paper',
+    bgcolor: "background.paper",
     boxShadow: 24,
     p: 4,
   };
-  
+
   const provinces = {
     1: "San José",
     2: "Alajuela",
@@ -106,106 +115,47 @@ const AthletesTab = ({ SwitchTab }) => {
     return date.toLocaleDateString("es-ES", options);
   };
 
-  //useEffect para los Atletas
+  //useEffect para Obtener todos los valores
   useEffect(() => {
-    const fetchAthletes = async () => {
+    const fetchData = async () => {
       try {
-        const response = await Athlete_services.getAthletes();
-        if (!response) {
-          return console.log("No se pudieron obtener los atletas");
+        console.log("hola");
+
+        const [
+          athletesResponse,
+          locationsResponse,
+          addressesResponse,
+          directionsResponse,
+          cantonsResponse,
+          parentsResponse,
+        ] = await Promise.all([
+          Athlete_services.get_accepted_athletes(),
+          Locations_services.get_Locations(),
+          Addresses_services.get_Addresses(),
+          Directions_services.get_Directions(),
+          Cantons_services.getCantons(),
+          Parents_services.get_parents(),
+        ]);
+
+        if (athletesResponse) setAthletes(athletesResponse);
+        if (locationsResponse) setLocations(locationsResponse);
+        if (addressesResponse) {
+          const addressMap = {};
+          addressesResponse.forEach((address) => {
+            addressMap[address.id] = address;
+          });
+          setUserAddresses(addressMap);
         }
-        setAthletes(response);
+        if (directionsResponse) setDirections(directionsResponse);
+        if (cantonsResponse) setCantons(cantonsResponse);
+        if (parentsResponse) setParents(parentsResponse);
       } catch (error) {
-        console.error("Error al obtener los atletas:", error);
+        console.error("Error fetching data:", error);
       }
     };
-    fetchAthletes();
-  }, []);
 
-   //useEffect para las Sedes
-  useEffect(() => {
-    const fetchLocations = async () => {
-      try {
-        const response = await Locations_services.get_Locations();
-        if (!response) {
-          return console.log("No se pudieron obtener las sedes");
-        }
-        setLocations(response);
-      } catch (error) {
-        console.error("Error al obtener las sedes:", error);
-      }
-    };
-    fetchLocations();
+    fetchData();
   }, []);
-
-   //useEffect para las Direcciones
-  useEffect(() => {
-    const fetchAddresses = async () => {
-      try {
-        const response = await Addresses_services.get_Adresses();
-        if (!response) {
-          return console.log("No se pudieron obtener las direcciones");
-        }
-        const addressMap = {};
-        response.forEach((address) => {
-          addressMap[address.id] = address;
-        });
-        setUserAddresses(addressMap);
-      } catch (error) {
-        console.error("Error al obtener las direcciones:", error);
-      }
-    };
-    fetchAddresses();
-  }, []);
-
-   //useEffect para las Direcciones exactas
-  useEffect(() => {
-    const fetchDirections = async () => {
-      try {
-        const response = await Directions_services.get_Directions();
-        if (!response) {
-          return console.log("No se pudieron obtener las direcciones exactas");
-        }
-        setDirections(response);
-      } catch (error) {
-        console.error("Error al obtener las direcciones exactas", error);
-      }
-    };
-    fetchDirections();
-  }, []);
-
-   //useEffect para los Cantones
-  useEffect(() => {
-    const fetchCantons = async () => {
-      try {
-        const response = await Cantons_services.getCantons();
-        if (!response) {
-          return console.log("No se pudieron obtener los cantones");
-        }
-        setCantons(response);
-      } catch (error) {
-        console.error("Error al obtener los cantones", error);
-      }
-    };
-    fetchCantons();
-  }, []);
-
-   //useEffect para los Padres o Encargados
-  useEffect(() => {
-    const fetchParents = async () => {
-      try {
-        const response = await Parents_services.get_parents();
-        if (!response) {
-          return console.log("No se pudieron obtener los padres o encargados");
-        }
-        setParents(response);
-      } catch (error) {
-        console.error("Error al obtener los padres o encargados:", error);
-      }
-    };
-    fetchParents();
-  }, []);
-
 
   //Funcion que crea el contenedor de padres
   const DisplayParents = (athlete) => {
@@ -218,7 +168,13 @@ const AthletesTab = ({ SwitchTab }) => {
         <h6 id="parent_title_h">Encargados</h6>
         <div id="parents_name_cont">
           {athleteParents.map((parent) => (
-            <div key={parent.id ? parent.id : `${parent.parent_name}-${parent.parent_phone}`}>
+            <div
+              key={
+                parent.id
+                  ? parent.id
+                  : `${parent.parent_name}-${parent.parent_phone}`
+              }
+            >
               <p>
                 {parent.parent_name} {parent.parent_first_lastname}{" "}
                 {parent.parent_second_lastname}
@@ -229,7 +185,13 @@ const AthletesTab = ({ SwitchTab }) => {
         <h6 id="parent_phone_title">Contacto</h6>
         <div id="parents_phone_cont">
           {athleteParents.map((parent) => (
-            <div key={parent.phone ? parent.phone : `${parent.parent_name}-${parent.id}`}>
+            <div
+              key={
+                parent.phone
+                  ? parent.phone
+                  : `${parent.parent_name}-${parent.id}`
+              }
+            >
               <p>{parent.parent_phone}</p>
             </div>
           ))}
@@ -262,7 +224,12 @@ const AthletesTab = ({ SwitchTab }) => {
                 if (athlete.location_id === location.id) {
                   const address = userAddresses[athlete.address_id];
                   return (
-                    <Accordion key={athlete.id || `${athlete.athlete_name}-${athlete.phone}`} id="Accordion">
+                    <Accordion
+                      key={
+                        athlete.id || `${athlete.athlete_name}-${athlete.phone}`
+                      }
+                      id="Accordion"
+                    >
                       <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1-content"
@@ -294,9 +261,16 @@ const AthletesTab = ({ SwitchTab }) => {
                           </div>
                           <div>
                             {address && provinces[address.province_id]}, {""}
-                            {address && cantons.find((canton) => canton.id === address.canton_id)?.canton_name}
+                            {address &&
+                              cantons.find(
+                                (canton) => canton.id === address.canton_id
+                              )?.canton_name}
                             , {""}
-                            {address && directions.find((direction) => direction.id === address.direction_id)?.direction_name}
+                            {address &&
+                              directions.find(
+                                (direction) =>
+                                  direction.id === address.direction_id
+                              )?.direction_name}
                           </div>
                         </div>
 
@@ -351,8 +325,15 @@ const AthletesTab = ({ SwitchTab }) => {
                           <p>{athlete.actual_grade}</p>
                         </div>
                         <div id="athlete_picture_cont"></div>
-                        <Button variant="contained"
-                          color="primary" onClick={handleOpen}>Editar Atleta</Button>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={(e) => {
+                            handleOpen(athlete);
+                          }}
+                        >
+                          Editar Atleta
+                        </Button>
                       </AccordionDetails>
                     </Accordion>
                   );
@@ -367,7 +348,7 @@ const AthletesTab = ({ SwitchTab }) => {
   };
 
   return (
-    <div id="Athletes_cont">
+    <div style={{ padding: 4 }} id="Athletes_cont">
       <div id="switch_cont">
         <div id="switch">
           Atletas
@@ -391,11 +372,12 @@ const AthletesTab = ({ SwitchTab }) => {
           }}
         >
           <Fade in={open}>
-            <Box sx={style}>
-              <Edit_athlete_form User={{ ...user_logged }} />
+            <Box id="edit_athlete_form_box" sx={style}>
+              <Edit_athlete_form User={{ ...selected_athlete }} Resseted_toastify={toastify_password_resseted} Athlete_updated={toastify_athlete_updated} />
             </Box>
           </Fade>
         </Modal>
+        <ToastContainer />
       </div>
     </div>
   );

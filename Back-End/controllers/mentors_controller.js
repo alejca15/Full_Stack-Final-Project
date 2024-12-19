@@ -1,5 +1,5 @@
 const { Mentors } = require("../models");
-const bcrypt=require('bcrypt')
+
 
 //----------------------Get------------------------//
 const get_mentors = async (req, res) => {
@@ -18,19 +18,14 @@ const post_mentor = async (req, res) => {
       mentor_name,
       mentor_lastname,
       location_id,
-      mail,
-      password,
       phone,
     } = req.body;
 
-    const hashed_password= await bcrypt.hash(password,10);
 
     const new_mentor = await Mentors.create({
       mentor_name,
       mentor_lastname,
       location_id,
-      mail,
-      password:hashed_password,
       phone,
     });
     res.status(201).json(new_mentor);
@@ -62,8 +57,6 @@ const update_mentor = async (req, res) => {
       mentor_name,
       mentor_lastname,
       location_id,
-      mail,
-      password,
       phone,
     } = req.body;
     const mentor = await Mentors.findByPk(id);
@@ -74,8 +67,6 @@ const update_mentor = async (req, res) => {
       mentor_name,
       mentor_lastname,
       location_id,
-      mail,
-      password,
       phone,
     });
     res.status(200).json(mentor);

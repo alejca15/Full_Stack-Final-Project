@@ -1,5 +1,4 @@
 .Home_body{
-    border: 2px solid red;
     width: 100%;
     min-height: 100vh;
     display: grid;
@@ -12,12 +11,17 @@
     grid-row: 1;
     grid-column: 1/4;
     border-bottom: 1px solid rgba(201, 201, 201, 0.916);
+    width: 100%;
+    position: absolute;
+    z-index: 1000;
 }
 
 #Nav_body{
+    width: 100%;
     display: grid;
     grid-template-columns: 300px 1fr 1fr;
-    background-color: rgba(235, 235, 235, 0.916);
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
 
 #Nav_body img {
@@ -34,14 +38,18 @@
 #Sidetab_container{
     grid-row: 2/4;
     grid-column: 1;
-    border-right: 1px solid;
     border-color: rgba(201, 201, 201, 0.916);
 }
 
 
 #Sidetab_body{
-    background-color: rgba(235, 235, 235, 0.916);
+    background-color: #050A30;
     height: 100%;
+}
+
+#Sidetab_body .MuiTab-root {
+    border-bottom: 1px solid #00091e;
+    color: white; /* Cambia el color del texto de los tabs a blanco */
 }
 
 /*---------------------Current Tab------------------*/
@@ -49,6 +57,6 @@
 #Current_tab{
     grid-row: 2;
     grid-column: 2/4;
-    width: 99%;
+    width: 99%; 
 }
 

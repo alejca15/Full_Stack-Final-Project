@@ -1,5 +1,4 @@
 const { Counselors } = require("../models");
-const bcrypt=require('bcrypt')
 
 
 //----------------------Get------------------------//
@@ -19,20 +18,14 @@ const post_counselor = async (req, res) => {
       counselor_name,
       counselor_first_lastname,
       counselor_second_lastname,
-      mail,
-      password,
       location_id,
       phone,
     } = req.body;
-
-    const hashed_password= await bcrypt.hash(password,10);
 
     const new_counselor = await Counselors.create({
       counselor_name,
       counselor_first_lastname,
       counselor_second_lastname,
-      mail,
-      password:hashed_password,
       location_id,
       phone,
     });
@@ -65,8 +58,6 @@ const update_counselor = async (req, res) => {
       counselor_name,
       counselor_first_lastname,
       counselor_second_lastname,
-      mail,
-      password,
       location_id,
       phone,
     } = req.body;
@@ -78,8 +69,6 @@ const update_counselor = async (req, res) => {
       counselor_name,
       counselor_first_lastname,
       counselor_second_lastname,
-      mail,
-      password,
       location_id,
       phone,
     });

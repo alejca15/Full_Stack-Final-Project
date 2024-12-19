@@ -2,37 +2,53 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Counselors', {
+    await queryInterface.createTable('Users', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      counselor_name: {
+      mail: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull:false,
+        unique:true
       },
-      counselor_first_lastname: {
+      password: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull:false,
       },
-      counselor_second_lastname: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      location_id: {
+      counselor_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull:true,
         references:{
-          model:"Locations",
-          key:"id",
+          model:'Counselors',
+          key:'id'
         }
       },
-      phone: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique:true,
+      admin_id: {
+        type: Sequelize.INTEGER,
+        allowNull:true,
+        references:{
+          model:'Admins',
+          key:'id'
+        }
+      },
+      athlete_id: {
+        type: Sequelize.INTEGER,
+        allowNull:true,
+        references:{
+          model:'Athletes',
+          key:'id'
+        }
+      },
+      mentor_id: {
+        type: Sequelize.INTEGER,
+        allowNull:true,
+        references:{
+          model:'Mentors',
+          key:'id'
+        }
       },
       createdAt: {
         allowNull: false,
@@ -49,6 +65,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Counselors');
+    await queryInterface.dropTable('Users');
   }
 };

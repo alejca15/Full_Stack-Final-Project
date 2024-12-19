@@ -7,6 +7,7 @@ module.exports = (sequelize) => {
       //Belongs To
       this.belongsTo(models.Locations, { foreignKey: "location_id" });
       //Has many
+      this.hasMany(models.Users, { foreignKey: "counselor_id" });
       this.hasMany(models.Comments_by_incidents, { foreignKey: "counselor_id" });
     }
     
@@ -23,15 +24,6 @@ module.exports = (sequelize) => {
       },
       counselor_second_lastname: {
         type: DataTypes.STRING,
-        allowNull: false,
-      },
-      mail: { 
-        type: DataTypes.STRING, 
-        allowNull: false,
-        unique:true,
-      },
-      password: { 
-        type: DataTypes.STRING, 
         allowNull: false,
       },
       location_id: {

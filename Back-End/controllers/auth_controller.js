@@ -5,64 +5,49 @@ const { jwtSecret, jwtExpiresIn } = require("../config");
 
 const iniciarSesion = async (req, res) => {
   const { mail_usuario, contra_usuario } = req.body;
-  let Table_name = "";
+  let Rol = "";
+  let Table_id=null
   try {
-    // Buscar el usuario por su nombre de usuario
-    const [Athlete, Mentor, Counselor, Admin] = await Promise.all([
-      axios.get(`http://localhost:3000/Athletes`),
-      axios.get(`http://localhost:3000/Mentors`),
-      axios.get(`http://localhost:3000/Counselors`),
-      axios.get(`http://localhost:3000/Admins`),
-    ]);
+    // Buscar el usuario por su correo
+    const response = await axios.get(`http://localhost:3000/Users`);
 
-    //Validamos si es Atleta
-    const is_Athlete = Athlete.data.find((user) => {
-      if (user.mail === mail_usuario) {
-        Table_name = "Athletes";
-        return user;
-      }
-    });
+    const user = response.data.find((user) => user.mail === mail_usuario);
+    console.log("Usuario encontrado",user);
 
-    //Validamos si es Mentor
-    const is_Mentor = Mentor.data.find((user) => {
-      if (user.mail === mail_usuario) {
-        Table_name = "Mentors";
-        return user;
-      }
-    });
+    if (user.athlete_id!=null){
+      Rol = "Athletes";
+      Table_id=user.athlete_id;
+    }
+    if (user.mentor_id!=null){
+      Rol = "Mentors";
+      Table_id=user.mentor_id;
+    }
+    if (user.counselor_id!=null){
+      Rol = "Counselors";
+      Table_id= user.counselor_id;
+    }
+    if (user.admin_id!=null){
+      Rol = "Admins";
+      Table_id=user.admin_id;
+    }
+  
 
-    //Validamos si es Counselor
-    const is_Counselor = Counselor.data.find((user) => {
-      if (user.mail === mail_usuario) {
-        Table_name = "Counselors";
-        return user;
-      }
-    });
-
-    //Validamos si es Admin
-    const is_Admin = Admin.data.find((user) => {
-      if (user.mail === mail_usuario) {
-        Table_name = "Admins";
-        return user;
-      }
-    });
-
-    const usuario=is_Athlete||is_Mentor||is_Counselor||is_Admin
-
-    if (!usuario) {
+    if (!user) {
       return console.log("El usuario no fue encontrado");
     }
 
+    console.log(contra_usuario,user.password);
+    
     const esContrasenaValida = await bcrypt.compare(
       contra_usuario,
-      usuario.password
+      user.password
     ); 
     if (!esContrasenaValida) {
       return res.status(401).json({ message: "Credenciales incorrectas." });
     }
     // Generar el token JWT
     const token = jwt.sign(
-      { id: usuario.id, Rol: Table_name },
+      { id: user.id, Rol: Rol, Table_id: Table_id },
       jwtSecret,
       {
         expiresIn: jwtExpiresIn,

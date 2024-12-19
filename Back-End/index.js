@@ -18,6 +18,7 @@ const Comments = require('./routes/comments_by_incidents_routes'); // Importa la
 const Admins = require('./routes/admins_routes'); // Importa las rutas de los Admins
 const Incidents = require('./routes/incidents_routes'); // Importa las rutas de los Admins
 const auth_routes=require("./routes/auth_routes");
+const Users_routes=require("./routes/users_routes");
 const auth = require('./middlewares/auth_middleware.jsx');
 const cors=require('cors')
 
@@ -35,6 +36,7 @@ sequelize.authenticate()
 
 // Usar las rutas de productos
 app.use('/auth', auth_routes);
+app.use('/Users', Users_routes);
 app.use('/Provinces', Province_route);
 app.use('/Directions', Directions_route);
 app.use('/Cantons', Cantons_route);
