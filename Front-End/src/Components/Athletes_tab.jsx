@@ -22,6 +22,7 @@ import Fade from "@mui/material/Fade";
 import Edit_athlete_form from "../Components/Edit_athlete_form";
 import Mentors_services from "../Services/Mentors_services";
 import Admins_services from "../Services/Admins_services";
+import User_services from "../Services/User_services";
 import Counselors_services from "../Services/Counselors_services";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -37,6 +38,7 @@ const AthletesTab = ({ SwitchTab }) => {
   const [userAddresses, setUserAddresses] = useState({});
   const [parents, setParents] = useState([]);
   const [selected_athlete, setSelected_athlete] = useState({});
+  const [Users, setUsers] = useState([]);
 
   //Toastify
   const toastify_password_resseted = () => toast.success("Contraseña restaurada!");
@@ -119,8 +121,6 @@ const AthletesTab = ({ SwitchTab }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("hola");
-
         const [
           athletesResponse,
           locationsResponse,
@@ -128,6 +128,7 @@ const AthletesTab = ({ SwitchTab }) => {
           directionsResponse,
           cantonsResponse,
           parentsResponse,
+          usersResponse,
         ] = await Promise.all([
           Athlete_services.get_accepted_athletes(),
           Locations_services.get_Locations(),
@@ -135,6 +136,7 @@ const AthletesTab = ({ SwitchTab }) => {
           Directions_services.get_Directions(),
           Cantons_services.getCantons(),
           Parents_services.get_parents(),
+          User_services.get_users(),
         ]);
 
         if (athletesResponse) setAthletes(athletesResponse);
@@ -149,6 +151,8 @@ const AthletesTab = ({ SwitchTab }) => {
         if (directionsResponse) setDirections(directionsResponse);
         if (cantonsResponse) setCantons(cantonsResponse);
         if (parentsResponse) setParents(parentsResponse);
+        if (usersResponse) setUsers(usersResponse);
+        
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -199,6 +203,15 @@ const AthletesTab = ({ SwitchTab }) => {
       </div>
     );
   };
+
+  //Funcion que busca el correo del usuario y devuelve
+  const load_mail =(athlete)=>{
+    const user = Users.find((user) => user.athlete_id === athlete.id);
+    if (user) {
+      return <p>{user.mail}</p>
+    }
+    return <p>No hay correo</p>
+  }
 
   //Funcion que despliega el tab con la informacion del atleta
   const DisplayAthletes = () => {
@@ -253,7 +266,7 @@ const AthletesTab = ({ SwitchTab }) => {
                       <AccordionDetails id="Athlete_accordion_info">
                         <div id="mail_cont">
                           <p style={{ fontWeight: "bold" }}>Correo</p>
-                          <p>{athlete.mail}</p>
+                          {load_mail(athlete)}  
                         </div>
                         <div id="address_cont">
                           <div>
@@ -373,7 +386,7 @@ const AthletesTab = ({ SwitchTab }) => {
         >
           <Fade in={open}>
             <Box id="edit_athlete_form_box" sx={style}>
-              <Edit_athlete_form User={{ ...selected_athlete }} Resseted_toastify={toastify_password_resseted} Athlete_updated={toastify_athlete_updated} />
+              <Edit_athlete_form User={{ ...selected_athlete }} Self_close={handleClose} Resseted_toastify={toastify_password_resseted} Athlete_updated={toastify_athlete_updated} />
             </Box>
           </Fade>
         </Modal>

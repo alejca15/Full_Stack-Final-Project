@@ -14,7 +14,7 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Backdrop from "@mui/material/Backdrop";
 
-const Edit_athlete_form = ({ User,Resseted_toastify,Athlete_updated }) => {
+const Edit_athlete_form = ({ User,Resseted_toastify,Athlete_updated,Self_close }) => {
   const [cantons, setCantons] = useState([]);
   const [province, setProvince] = useState(1);
   const [canton, setCanton] = useState("");
@@ -47,41 +47,6 @@ const Edit_athlete_form = ({ User,Resseted_toastify,Athlete_updated }) => {
     borderRadius: "5px",
   };
 
-  //Tallas de zapatos y camisas
-  const shoe_sizes = {
-    1: "35",
-    2: "36",
-    3: "37",
-    4: "38",
-    5: "39",
-    6: "40",
-    7: "41",
-    8: "42",
-    9: "43",
-    10: "44",
-    11: "45",
-    12: "46",
-    13: "47",
-  };
-
-  const shirt_sizes = {
-    1: "XS",
-    2: "S",
-    3: "M",
-    4: "L",
-    5: "XL",
-    6: "XXL",
-  };
-
-  const provinces = {
-    1: "San José",
-    2: "Alajuela",
-    3: "Cartago",
-    4: "Heredia",
-    5: "Guanacaste",
-    6: "Puntarenas",
-    7: "Limón",
-  };
 
   // Cargar el correo del atleta
   const loadUser = async () => {
@@ -260,12 +225,7 @@ const Edit_athlete_form = ({ User,Resseted_toastify,Athlete_updated }) => {
           }
         }
   
-        //Put de Address
-        console.log("Esto es address",Address);
-        console.log("Esto es Province",province);
-        console.log("Esto es Canton",canton);
-        
-        
+        //Put de Address        
         if (Address.province_id != province || Address.canton_id != canton) {
           console.log("Entre a Address");
           Address.province_id = province;
@@ -355,6 +315,7 @@ const Edit_athlete_form = ({ User,Resseted_toastify,Athlete_updated }) => {
           }
         }
 
+        Self_close();
         return Athlete_updated();
       } catch (error) {
         console.error(error);
