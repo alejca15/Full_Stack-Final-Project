@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useState,useContext } from "react";
 import { TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import post_login from "../Services/post_login";
+import Endurance_context from "./Context/Endurance_context";
 import { jwtDecode } from "jwt-js-decode";
 
 function Login_form() {
   const navigate = useNavigate();
   const [Password, setPassword] = useState("");
   const [Mail, setMail] = useState("");
+  const {login} =useContext(Endurance_context);
+
+
 
   const validate_login = async () => {
     //Validaciones
@@ -23,8 +27,14 @@ function Login_form() {
     if (encrypted_token_JSON && encrypted_token_JSON.token) {
       const token = encrypted_token_JSON.token;
       sessionStorage.setItem("Token", token);
+      const Decoded_token = jwtDecode(token);
+      const Token_JSON = Decoded_token.payload;
+      const Rol = Token_JSON.Rol;
+      login(Rol);
       navigate("/Home")
     }
+
+    
     
   };
 

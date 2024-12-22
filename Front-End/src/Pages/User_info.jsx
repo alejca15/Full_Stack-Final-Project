@@ -9,7 +9,7 @@ import Counselors_services from "../Services/Counselors_services";
 import Mentors_services from "../Services/Mentors_services";
 import Admins_services from "../Services/Admins_services";
 import "../Styles/User_info.css";
-
+import Edit_mentor_form from "../Components/Edit_mentor_form";
 
 const User_info = () => {
   //Hook de control de tab
@@ -21,6 +21,7 @@ const User_info = () => {
   const Token_JSON = Decoded_token.payload;
   const Rol = Token_JSON.Rol;
 
+  //Carga el usuario loggeado
   const Load_user_logged = async () => {
     const serviceMap = {
       Athletes: Athlete_services.getAthletes,
@@ -34,7 +35,6 @@ const User_info = () => {
     if (selectedService) {
       const list = await selectedService();
       return list.find((user) => user.id === Token_JSON.Table_id);
-      
     } else {
       console.error(`No se encontró el servicio para la tabla: ${Rol}`);
     }
@@ -48,12 +48,25 @@ const User_info = () => {
     };
 
     fetchUser();
-  }, []); // Se ejecuta solo una vez al montarse el componente
+  }, []); 
 
   // Si el usuario aún no se ha cargado, mostramos un mensaje de carga
   if (!userLogged) {
     return <div>Loading...</div>;
   }
+
+  //Switch para validar cual form de edicion de usuarios se muestra 
+
+  const show_edit_user_form = () => {
+    switch (Rol) {
+      case "Athletes":
+        return <Edit_athlete_form User={userLogged} />;
+      case "Mentors":
+        return <div id="Edit_mentor_form_main_cont"><Edit_mentor_form User={userLogged} /></div>;
+      default:
+        return <div>No se encontró el rol del usuario</div>;
+    }
+  };
 
 
   return (
@@ -61,7 +74,7 @@ const User_info = () => {
       <div id="Nav_container">
         <Navbar />
       </div>
-      <div id="Current_tab"><Edit_athlete_form User={userLogged}/></div>
+      <div id="Current_tab">{show_edit_user_form()}</div>
       <div id="Sidetab_container">
         <Sidetab Selected_tab={3}
         />
