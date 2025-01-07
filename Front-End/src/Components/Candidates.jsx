@@ -8,8 +8,8 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Locations_services from "../Services/Locations_services";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
@@ -20,8 +20,6 @@ const Candidates_tab = ({ SwitchTab }) => {
   //Toastify
   const notify_accepted_athlete = () => toast("Candidato aceptado!");
   const notify_denied_athlete = () => toast("Candidato rechazado!");
-
-      
 
   //useEffect para los candidatos
   useEffect(() => {
@@ -60,7 +58,10 @@ const Candidates_tab = ({ SwitchTab }) => {
   const accept_athlete = async (athlete) => {
     try {
       athlete.athlete_status = "Activo";
-      const response = await Athlete_services.updateAthlete(athlete.id,athlete);
+      const response = await Athlete_services.updateAthlete(
+        athlete.id,
+        athlete
+      );
       if (!response) {
         console.error(error);
         return console.log("El atleta no pudo ser actualizado");
@@ -118,7 +119,6 @@ const Candidates_tab = ({ SwitchTab }) => {
           >
             Denegar
           </Button>
-          
         </div>
       </div>
     );
@@ -128,7 +128,7 @@ const Candidates_tab = ({ SwitchTab }) => {
     return Locations.map((Location) => {
       return (
         <div>
-          <Accordion id="Accordion" >
+          <Accordion id="Accordion">
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1-content"
@@ -151,7 +151,7 @@ const Candidates_tab = ({ SwitchTab }) => {
   };
 
   return (
-    <div style={{padding:4}} id="Athletes_cont">
+    <div style={{ padding: 4 }} id="Athletes_cont">
       <div id="switch_cont">
         <div id="switch">
           Atletas
@@ -160,6 +160,7 @@ const Candidates_tab = ({ SwitchTab }) => {
         </div>
       </div>
       <div id="Candidates_cont">{Display_candidates()}</div>
+      <ToastContainer />
     </div>
   );
 };

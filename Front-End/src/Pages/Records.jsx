@@ -2,15 +2,16 @@ import { useState, useEffect } from "react";
 import Navbar from "../Components/Navbar";
 import Sidetab from "../Components/Sidetab";
 import "../Styles/Home.css";
-import Incident_tab from "../Components/Incidents";
+import File_manager from "../Components/File_manager";
 import { jwtDecode } from "jwt-js-decode";
 import Athlete_services from "../Services/Athlete_services";
 import Counselors_services from "../Services/Counselors_services";
 import Mentors_services from "../Services/Mentors_services";
 import Admins_services from "../Services/Admins_services";
+import "../Styles/Records.css";
 
 
-const Incidents = () => {
+const Records = () => {
   //Hook de control de tab
   const [userLogged, setUserLogged] = useState(null);
 
@@ -49,10 +50,7 @@ const Incidents = () => {
     fetchUser();
   }, []); // Se ejecuta solo una vez al montarse el componente
 
-  // Si el usuario aún no se ha cargado, mostramos un mensaje de carga
-  if (!userLogged) {
-    return <div>Loading...</div>;
-  }
+
 
 
   return (
@@ -60,7 +58,7 @@ const Incidents = () => {
       <div id="Nav_container">
         <Navbar />
       </div>
-      <div id="Current_tab"><Incident_tab/></div>
+      <div id="Current_tab"><File_manager/></div>
       <div id="Sidetab_container">
         <Sidetab Selected_tab={2}
         />
@@ -69,4 +67,4 @@ const Incidents = () => {
   );
 };
 
-export default Incidents;
+export default Records;

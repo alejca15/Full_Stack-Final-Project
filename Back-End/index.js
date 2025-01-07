@@ -20,6 +20,8 @@ const Incidents = require('./routes/incidents_routes'); // Importa las rutas de 
 const auth_routes=require("./routes/auth_routes");
 const Users_routes=require("./routes/users_routes");
 const auth = require('./middlewares/auth_middleware.jsx');
+const files_routes = require('./routes/files_routes');
+
 const cors=require('cors')
 
 const app = express();
@@ -27,7 +29,13 @@ const PORT = 3000;
 
 app.use(express.json()); // Middleware para parsear JSON
 
-app.use(cors()); //Activar Cors
+const corsOptions = {
+  origin:["http://localhost:5173", "http://localhost:5173/"],
+  methods: ['GET', 'POST', 'PUT', 'DELETE','OPTIONS'], // Métodos permitidos
+  allowedHeaders: ['Content-Type', 'Authorization'], // Headers permitidos
+};
+
+app.use(cors(corsOptions));
 
 // Probar la conexión con la base de datos
 sequelize.authenticate()
@@ -54,6 +62,7 @@ app.use('/Counselors', Counselors);
 app.use('/Comments', Comments);
 app.use('/Admins', Admins);
 app.use('/Incidents', Incidents);
+app.use('/Files', files_routes);
 
 // Iniciar el servidor
 app.listen(PORT, () => {

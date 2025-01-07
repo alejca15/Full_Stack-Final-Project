@@ -47,8 +47,8 @@ export default function Sidetab({ Selected_tab }) {
     navigate("/Home/Grades")
   }
 
-  const goIncidents=()=>{
-    navigate("/Home/Incidents")
+  const goRecords=()=>{
+    navigate("/Home/Records")
   }
 
   const goUser=()=>{
@@ -69,7 +69,7 @@ export default function Sidetab({ Selected_tab }) {
       case "Athletes":
         return [
           <Tab key="calendario" onClick={goCalendar} label="Calendario" />,
-          <Tab key="incidentes" onClick={goIncidents} label="Incidentes" />,
+          <Tab key="incidentes" onClick={goRecords} label="Incidentes" />,
           <Tab key="notas" onClick={goGrades} label="Notas" />,
           <Tab key="informacion" onClick={goUser} label="Informacion del Usuario" />,
         ];
@@ -77,7 +77,7 @@ export default function Sidetab({ Selected_tab }) {
         return [
           <Tab key="calendario" onClick={goCalendar}  label="Calendario" />,
           <Tab key="atletas" onClick={goAthletes} label="Atletas" />,
-          <Tab key="incidentes" onClick={goIncidents} label="Incidentes" />,
+          <Tab key="incidentes" onClick={goRecords} label="Expediente" />,
           <Tab key="informacion" onClick={goUser}  label="Informacion del Usuario" />,
         ];
       case "Counselors":
@@ -85,7 +85,7 @@ export default function Sidetab({ Selected_tab }) {
           <Tab key="calendario" onClick={goCalendar}  label="Calendario" />,
           <Tab key="atletas" onClick={goAthletes} label="Atletas" />,
           <Tab key="mentores" label="Mentores" />,
-          <Tab key="incidentes" onClick={goIncidents} label="Incidentes" />,
+          <Tab key="incidentes" onClick={goRecords} label="Incidentes" />,
           <Tab key="expediente" label="Expediente" />,
           <Tab key="informacion" onClick={goUser}  label="Informacion del Usuario" />,
         ];
@@ -95,7 +95,7 @@ export default function Sidetab({ Selected_tab }) {
           <Tab key="atletas"  onClick={goAthletes} label="Atletas" />,
           <Tab key="mentores" label="Mentores" />,
           <Tab key="orientadores" label="Orientadores" />,
-          <Tab key="incidentes" onClick={goIncidents} label="Incidentes" />,
+          <Tab key="incidentes" onClick={goRecords} label="Incidentes" />,
           <Tab key="expediente" label="Expediente" />,
           <Tab key="informacion" onClick={goUser}  label="Informacion del Usuario" />,
           <Tab key="sedes" label="Sedes" />,
