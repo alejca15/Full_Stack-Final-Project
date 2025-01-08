@@ -30,6 +30,7 @@ import MovieIcon from "@mui/icons-material/Movie";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import AudioFileIcon from "@mui/icons-material/AudioFile";
 import SdCardAlertIcon from "@mui/icons-material/SdCardAlert";
+import HomeIcon from "@mui/icons-material/Home";
 
 const style = {
   position: "absolute",
@@ -62,6 +63,9 @@ const File_manager = () => {
   const [is_cut, setIs_cut] = useState(false);
   const [fileContent, setFileContent] = useState(null);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [routeInputValue, setRouteInputValue] = useState(root);
+  const [searchTerm, setSearchTerm] = useState("");
+
   const [edit_file_name_modal_visibility, setEdit_file_name_modal_visibility] =
     useState(false);
   const [download_file_modal_visibility, setDownload_file_modal_visibility] =
@@ -80,7 +84,9 @@ const File_manager = () => {
   const cancel_modal_visibliity_close = () => setCancel_modal_visibility(false);
 
   const dowload_file_modal_open = (file) => {
-    setFile_to_download(file), setDownload_file_modal_visibility(true),open_file(file);
+    setFile_to_download(file),
+      setDownload_file_modal_visibility(true),
+      open_file(file);
   };
   const dowload_file_modal_close = () => {
     setFileContent(null), setDownload_file_modal_visibility(false);
@@ -160,7 +166,7 @@ const File_manager = () => {
 
     order_files();
   }, [files_in_route]);
-  
+
   //Funcion para subir archivos
   const Upload_file = () => {
     if (file === null) return;
@@ -182,7 +188,6 @@ const File_manager = () => {
     });
   };
 
-  
   const generate_folders_scheme = async (storage, root) => {
     const queue = [{ path: root, parent: null }];
     const structure = [];
@@ -240,8 +245,18 @@ const File_manager = () => {
     fetchFolders();
   }, [root]);
 
+  // Sincroniza el valor del TextField con actual_route
+  useEffect(() => {
+    setRouteInputValue(actual_route);
+  }, [actual_route]);
 
+  const handleRouteInputChange = (event) => {
+    setRouteInputValue(event.target.value);
+  };
 
+  const handleRouteInputBlur = () => {
+    setActual_route(routeInputValue);
+  };
 
   //Funcion para crear carpetas
   const createFolder = async () => {
@@ -435,6 +450,8 @@ const File_manager = () => {
       const newRoute = actual_route.substring(0, lastSlashIndex);
       setActual_route(newRoute);
     }
+    setSelected_files([]);
+    setSearchTerm("");
   }
 
   //funcion para la seleccion de archivos
@@ -459,17 +476,53 @@ const File_manager = () => {
     setCopied_files([]);
   };
 
+  //verifica si el folder esta vacío
+  const isFolderEmpty = (files) => {
+    if (files.length === 0) return true;
+
+    return files.every((file) => {
+      if (file.Url !== null && !file.Url.includes(".empty")) return false; // Si hay un archivo que no es .empty, no está vacío
+      if (file.children && file.children.length > 0) {
+        return isFolderEmpty(file.children); // Verificar recursivamente
+      }
+      return true; // Si es una carpeta sin hijos o solo tiene .empty
+    });
+  };
+
   //funcion que despliega el contenedor principal del file manager
   const display_all_files = () => {
     if (loading) {
       return <div key={"loading_cont"}>Cargando...</div>;
     }
 
+    const filteredFiles = searchTerm
+      ? filterFiles(files_in_route, searchTerm)
+      : files_in_route;
+
+    if (filteredFiles.length === 0) {
+      return (
+        <div id="empty_folder_page" key={"empty_folder"}>
+          <p>{searchTerm ? "Archivos no encontrados" : "Carpeta Vacía"}</p>
+        </div>
+      );
+    }
+
     return (
       <>
-        {display_folders(files_in_route)}
-        {display_files(files_in_route)}
+        {display_folders(filteredFiles)}
+        {display_files(filteredFiles)}
       </>
+    );
+  };
+
+  // Función para manejar el cambio del TextField
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filterFiles = (files, searchTerm) => {
+    return files.filter((file) =>
+      file.Name.toLowerCase().includes(searchTerm.toLowerCase())
     );
   };
 
@@ -569,6 +622,7 @@ const File_manager = () => {
     setCopied_files([]);
     setFiles_to_paste([]);
     setSelected_files([]);
+    setIs_cut(false);
   };
 
   //Funcion que despliega el boton de pegar
@@ -894,18 +948,23 @@ const File_manager = () => {
       }
 
       // Limpiar el estado de archivos a pegar
+
       setFiles_to_paste([]);
       setIs_cut(false);
+      const folderStructure = await generate_folders_scheme(storage, root);
+      setFolders_scheme(folderStructure);
     } else {
       await paste_selected_files(actual_route);
+      const folderStructure = await generate_folders_scheme(storage, root);
+      setFolders_scheme(folderStructure);
     }
   };
-
 
   //funcion que corta los archivos seleccionados
   const handle_cut_option = () => {
     setCopied_files(selected_files);
     setFiles_to_paste(selected_files);
+    setSelected_files([]);
     setIs_cut(true);
     setExpanded(false);
   };
@@ -915,8 +974,7 @@ const File_manager = () => {
     setAnchorEl(null);
   };
 
-
-//funcion para un click en un lugar de deseleccion
+  //funcion para un click en un lugar de deseleccion
   const blank_click = () => {
     setExpanded(false);
     close_menu_when_added();
@@ -979,8 +1037,10 @@ const File_manager = () => {
       const response = await fetch(url);
       const blob = await response.blob();
       const link = document.createElement("a");
-      const fileExtension = fileName.split('.').pop();
-      const downloadName = fileName.includes('.') ? fileName : `${fileName}.${fileExtension}`;
+      const fileExtension = fileName.split(".").pop();
+      const downloadName = fileName.includes(".")
+        ? fileName
+        : `${fileName}.${fileExtension}`;
       link.href = window.URL.createObjectURL(blob);
       link.download = downloadName;
       document.body.appendChild(link);
@@ -991,8 +1051,13 @@ const File_manager = () => {
       console.error(`Error al descargar el archivo ${fileName}:`, error);
     }
   };
-  
-  
+
+  const nav_to_route = (route) => {
+    setActual_route(route);
+    setSearchTerm("");
+    setSelected_files([]);
+  };
+
   return (
     <div className="file_manager_body">
       <div className="file_manager_header">
@@ -1001,6 +1066,8 @@ const File_manager = () => {
             id="file_manager_searchbar"
             placeholder="Buscar Archivo"
             variant="outlined"
+            value={searchTerm}
+            onChange={handleSearchChange}
           />
         </div>
 
@@ -1012,6 +1079,7 @@ const File_manager = () => {
           loadFiles={file_modal_open}
           close_button={close_menu_when_added}
           scheme={folders_scheme}
+          nav_to_route={(e) => nav_to_route(e)}
         />
       </div>
       <div onClick={blank_click} className="file_manager_files">
@@ -1020,9 +1088,17 @@ const File_manager = () => {
             {display_selected_files_buttons()}
           </div>
           <div className="route_cont">
+            <HomeIcon
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                setActual_route(root), setSelected_files([]), setSearchTerm("");
+              }}
+            />
             <ArrowBackIcon onClick={go_back} style={{ cursor: "pointer" }} />
             <TextField
-              value={actual_route}
+              value={routeInputValue}
+              onChange={handleRouteInputChange}
+              onBlur={handleRouteInputBlur}
               variant="standard"
               id="route_cont_input"
             />
@@ -1175,9 +1251,7 @@ const File_manager = () => {
       >
         <Fade in={download_file_modal_visibility}>
           <Box className="download_file_modal">
-            <Box id="open_file_cont">
-              {fileContent}
-            </Box>
+            <Box id="open_file_cont">{fileContent}</Box>
             <Box id="download_file_buttons">
               <Button
                 onClick={() => download_file_by_url(file_to_download)}

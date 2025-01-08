@@ -101,6 +101,7 @@ export default function Side_tab_file_manager({
   newfolder,
   close_button,
   scheme,
+  nav_to_route
 }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [expanded, setExpanded] = React.useState(false);
@@ -129,7 +130,7 @@ export default function Side_tab_file_manager({
         return (
           <Accordion key={folder.path} expanded={!!expanded[folder.path]} onChange={handleChange(folder.path)} style={{ paddingLeft }}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography sx={{ fontSize: 'smaller' }}>{folder.name}</Typography>
+              <Typography onClick={()=>nav_to_route(folder.path)} sx={{ fontSize: 'smaller' }}>{folder.name}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               {renderAccordions(folder.children, level + 1)}
@@ -138,9 +139,9 @@ export default function Side_tab_file_manager({
         );
       } else {
         return (
-          <Box key={folder.path} display="flex" alignItems="center" style={{ paddingLeft:"20px", height: '30px' }}>
+          <Box onClick={()=>nav_to_route(folder.path)} key={folder.path} display="flex" alignItems="center"  style={{ cursor:"pointer", paddingLeft:"20px", height: '30px' }}>
             <FolderIcon sx={{ fontSize: 'smaller' }} />
-            <Typography sx={{ fontSize: 'smaller', marginLeft: '8px' }}>{folder.name}</Typography>
+            <Typography   sx={{ fontSize: 'smaller', marginLeft: '8px' }}>{folder.name}</Typography>
           </Box>
         );
       }
