@@ -44,7 +44,6 @@ const Edit_mentor_form = () => {
           if (!user_found) {
             return console.log("No se pudo encontrar el mentor");
           } else {
-            console.log(user_found);
             setInitialValues((prevValues) => ({
               ...prevValues,
               mail: user_found.mail || "",

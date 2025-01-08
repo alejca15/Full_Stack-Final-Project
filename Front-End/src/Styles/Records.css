@@ -1,6 +1,4 @@
 .file_manager_body {
-  display: flex;
-  flex-direction: column;
   height: 100%;
   width: 100%;
   display: grid;
@@ -19,7 +17,6 @@
 
 #file_manager_searchbar {
   width: 400px;
-
 }
 
 #file_manager_searchbar_cont {
@@ -54,7 +51,6 @@
   border-radius: 10px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-
 }
 
 #selected_menu_options {
@@ -91,7 +87,7 @@
   cursor: pointer;
 }
 
-#file_option_icon{
+#file_option_icon {
   align-self: center;
   justify-self: right;
 }
@@ -114,11 +110,13 @@
   grid-template-rows: 50px auto;
   width: 100%;
   height: 100%;
+  position: relative;
+  z-index: 500;
 }
 
 #file_cont {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 80% 20%;
   justify-content: center;
   justify-self: center;
   align-items: center;
@@ -126,6 +124,8 @@
   height: 98%;
   margin: 5px;
   border-radius: 4px;
+  position: relative;
+  z-index: 8000;
 }
 
 #file_cont span {
@@ -133,17 +133,26 @@
 }
 
 #file_cont img {
-  max-width: 100px;
-  max-height: 100px;
+  width: 110px;
+  height: 110px;
+  padding: 15px;
+}
+
+#file_cont p {
+  text-align: center;
+  align-self: center;
+  font-size: small;
+  max-height: 20px;
 }
 
 #folder_icon {
   width: 110px;
   height: 110px;
+  padding: 10px;
 }
 
 #route_cont {
-  grid-column: 1 / -1; 
+  grid-column: 1 / -1;
   display: grid;
   grid-template-columns: 25% 50% 25%;
   height: 100%;
@@ -156,7 +165,7 @@
   width: 400px;
   height: 30px;
 }
-.route_cont{
+.route_cont {
   display: flex;
   grid-column: 2;
   justify-items: center;
@@ -164,12 +173,11 @@
   width: 100%;
 }
 
-#selected_files_buttons{
+#selected_files_buttons {
   grid-column: 1;
 }
 
-
-#selected_files_buttons_cont{
+#selected_files_buttons_cont {
   display: flex;
   justify-content: space-around;
   align-items: flex-end;
@@ -177,18 +185,18 @@
   height: 100%;
 }
 
-#paste_button{
+#paste_button {
   font-size: x-small;
   height: 30px;
   width: 70px;
   margin-bottom: 10px;
 }
-#paste_button:hover{
+#paste_button:hover {
   background-color: rgba(150, 191, 249, 0.451);
   cursor: pointer;
 }
 
-#cancel_selection_button{
+#cancel_selection_button {
   display: flex;
   align-content: center;
   align-items: center;
@@ -198,9 +206,45 @@
   height: 30px;
   margin-bottom: 10px;
 }
-#cancel_selection_button:hover{
+#cancel_selection_button:hover {
   background-color: rgba(249, 150, 166, 0.451);
   cursor: pointer;
+}
+
+.download_file_modal {
+  display: grid;
+  grid-template-rows: 80% 1fr;
+  justify-self: center;
+  align-self: center;
+  width: 70%;
+  height: 85%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 4;
+  z-index: 5000;
+}
+
+#download_file_buttons{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+#open_file_cont{
+  border: 1px solid red;
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#download_file_buttons Button{
+  margin: 10px;
 }
 /*----------------------Sidetab----------------------*/
 .sidetab_cont {

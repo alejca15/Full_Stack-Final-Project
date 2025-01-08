@@ -4,9 +4,7 @@ import Endurance_context from "../Components/Context/Endurance_context";
 
 
 const Private_routes = ({ children }) => {
-    const { isAuthenticated } = useContext(Endurance_context);
-    console.log("Log autentificacion",isAuthenticated);
-    
+    const { isAuthenticated } = useContext(Endurance_context);    
     
     return isAuthenticated ? children : <Navigate to="/Login" />;
 };

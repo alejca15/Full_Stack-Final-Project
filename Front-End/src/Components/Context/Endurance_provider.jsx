@@ -7,7 +7,6 @@ const Endurance_provider = ({ children }) => {
   
   const login = async (user) => {
     setUserLogged(user);
-    console.log("Entre al provider", user);
   };
 
   const logout = () => {
