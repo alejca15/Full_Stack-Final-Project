@@ -112,6 +112,9 @@ const File_manager = () => {
   const already_exists_toast = () =>
     toast.error("Ya existe un archivo con ese nombre");
 
+  const folder_cant_be_remove = () =>
+    toast.error("No se puede eliminar la carpeta Notas");
+
   //Use Effects para mantener los datos actualizados
   useEffect(() => {
     const fetchUrls = async () => {
@@ -769,6 +772,7 @@ const File_manager = () => {
 
   //Funcion que elimina una carpeta
   const delete_folder = async (folderPath) => {
+
     const folderRef = ref(storage, folderPath);
     try {
       // Listar todos los archivos y carpetas dentro de la carpeta
@@ -798,7 +802,12 @@ const File_manager = () => {
 
   //Funcion que eliminar los archivos seleccionados
   const delete_selected_files = () => {
-    selected_files.forEach((file) => {
+    for (const file of selected_files) {
+      if (file.Name === "Notas") {
+        folder_cant_be_remove();
+        setCancel_modal_visibility(false);
+        return; 
+      }
       if (file.Url !== null) {
         delete_file(file.Path);
         setFiles_in_route((prevFiles) =>
@@ -810,7 +819,7 @@ const File_manager = () => {
         );
         delete_folder(file.Path);
       }
-    });
+    }
     cancelled_files_succesfully();
     setSelected_files([]);
     setCancel_modal_visibility(false);
@@ -1106,6 +1115,7 @@ const File_manager = () => {
         </div>
         {display_all_files()}
       </div>
+      //Modal para añadir archivos
       <Modal
         open={file_modal_visibility}
         onClose={file_modal_close}
@@ -1140,6 +1150,7 @@ const File_manager = () => {
           </Box>
         </Fade>
       </Modal>
+      //Modal para crear carpetas
       <Modal
         open={folder_modal_visibliity}
         onClose={folder_modal_close}
@@ -1176,6 +1187,7 @@ const File_manager = () => {
           </Box>
         </Fade>
       </Modal>
+      //Modal de cancelar
       <Modal
         open={cancel_modal_visibliity}
         onClose={cancel_modal_visibliity_close}

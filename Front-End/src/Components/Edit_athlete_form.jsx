@@ -14,7 +14,7 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Backdrop from "@mui/material/Backdrop";
 
-const Edit_athlete_form = ({ User,Resseted_toastify,Athlete_updated,Self_close }) => {
+const Edit_athlete_form = ({ User,Resseted_toastify }) => {
   const [cantons, setCantons] = useState([]);
   const [province, setProvince] = useState(1);
   const [canton, setCanton] = useState("");
@@ -252,9 +252,7 @@ const Edit_athlete_form = ({ User,Resseted_toastify,Athlete_updated,Self_close }
           }
         }
         
-        const athletes_response=await Athlete_services.getAthletes();
-        console.log(athletes_response);
-        
+        const athletes_response=await Athlete_services.get_Athletes();
         //Put de Athlete
         const updated_athlete = {
           id: User.id,
@@ -275,7 +273,7 @@ const Edit_athlete_form = ({ User,Resseted_toastify,Athlete_updated,Self_close }
           athlete_status: "Activo",
         };
       
-        const response = await Athlete_services.updateAthlete(updated_athlete.id,updated_athlete);
+        const response = await Athlete_services.update_Athlete(updated_athlete.id,updated_athlete);
         if (!response) {
           console.error("Error al actualizar el atleta", error);
         }
@@ -286,8 +284,6 @@ const Edit_athlete_form = ({ User,Resseted_toastify,Athlete_updated,Self_close }
   
         //Put de Athlete_sizes
         const sizes_response = await Athlete_sizes_services.get_AthleteSizes();
-        console.log(sizes_response);
-        
         if (!sizes_response) {
           console.error(error);
           throw error;
@@ -306,17 +302,12 @@ const Edit_athlete_form = ({ User,Resseted_toastify,Athlete_updated,Self_close }
           } else {            
             sizes_found.shoe_sizes_id = values.shoesize;
             sizes_found.shirt_sizes_id = values.shirtsize;
-            console.log("Tallas a actualizar",sizes_found);
-            
             const response = await Athlete_sizes_services.update_AthleteSize(sizes_found.id, sizes_found);
             if (!response) {
               console.error("Error al actualizar tallas", error);
             }
           }
         }
-
-        Self_close();
-        return Athlete_updated();
       } catch (error) {
         console.error(error);
         throw error;

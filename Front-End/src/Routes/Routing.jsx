@@ -8,9 +8,6 @@ import Athletes from "../Pages/Athletes";
 import Private_routes from "./Private_routes";
 
 
-
-
-
 function Routing() {
   return (
     <Router>

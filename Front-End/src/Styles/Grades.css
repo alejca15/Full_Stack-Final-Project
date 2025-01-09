@@ -1,0 +1,29 @@
+.Grades_Tab_body{
+    border: 5px solid black;
+    min-height: 100%;
+    max-height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr 100px;
+}
+
+.Grades_Tab_Footer{
+    height: 60px;
+    width: 100%;
+    grid-row: 2;
+    display: flex;
+    align-self: flex-end;
+    justify-content: right;
+}
+.Grades_Tab_Footer Button {
+    position: absolute;
+    z-index: 2000;
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.Grades_container{
+    position: fixed;
+    z-index: 100;
+    grid-row: 1/2;
+    border: 1px solid blue;
+}

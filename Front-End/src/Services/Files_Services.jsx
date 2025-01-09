@@ -1,13 +1,20 @@
 import axios from "axios";
 
+// Obtener el token de sessionStorage
+const token = sessionStorage.getItem("Token");
+
+// Configurar los encabezados de autorización
+const axiosConfig = {
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`
+  }
+};
+
 //----------------------------------Post-------------------------------//
 const post_file = async (file_data) => {
   try {
-    const response = await axios.post("http://localhost:3000/files", file_data, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await axios.post("http://localhost:3000/files", file_data, axiosConfig);
     return response.data;
   } catch (error) {
     console.error("Error posting file:", error);
@@ -18,7 +25,7 @@ const post_file = async (file_data) => {
 //----------------------------------Get-------------------------------//
 const get_files = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/files");
+    const response = await axios.get("http://localhost:3000/files", axiosConfig);
     return response.data;
   } catch (error) {
     console.error("Error fetching files:", error);
@@ -29,7 +36,7 @@ const get_files = async () => {
 //----------------------------------Delete-------------------------------//
 const delete_file = async (id) => {
   try {
-    await axios.delete(`http://localhost:3000/files/${id}`);
+    await axios.delete(`http://localhost:3000/files/${id}`, axiosConfig);
   } catch (error) {
     console.error("Error deleting file:", error);
     throw error;
@@ -39,11 +46,7 @@ const delete_file = async (id) => {
 //----------------------------------Put-------------------------------//
 const update_file = async (id, file_data) => {
   try {
-    const response = await axios.put(`http://localhost:3000/files/${id}`, file_data, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await axios.put(`http://localhost:3000/files/${id}`, file_data, axiosConfig);
     return response.data;
   } catch (error) {
     console.error("Error updating file:", error);

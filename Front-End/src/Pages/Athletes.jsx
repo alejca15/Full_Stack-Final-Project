@@ -8,7 +8,7 @@ import Athlete_services from "../Services/Athlete_services";
 import Counselors_services from "../Services/Counselors_services";
 import Mentors_services from "../Services/Mentors_services";
 import Admins_services from "../Services/Admins_services";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
 const Athletes = () => {
   //Hook de control de tab
@@ -37,7 +37,7 @@ const Athletes = () => {
 
   const Load_user_logged = async () => {
     const serviceMap = {
-      Athletes: Athlete_services.getAthletes,
+      Athletes: Athlete_services.get_Athletes,
       Mentors: Mentors_services.get_mentors,
       Admins: Admins_services.get_Admins,
       Counselors: Counselors_services.get_counselors,
@@ -47,7 +47,7 @@ const Athletes = () => {
 
     if (selectedService) {
       const list = await selectedService();
-      user_logged = list.find((user) => user.id === Token_JSON.id);
+      user_logged = list.find((user) => user.id === Token_JSON.Table_id);
     } else {
       console.error(`No se encontró el servicio para la tabla: ${Table_name}`);
     }

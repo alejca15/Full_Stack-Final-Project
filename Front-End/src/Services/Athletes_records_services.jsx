@@ -12,9 +12,9 @@ const axiosConfig = {
 };
 
 //------------------POST-----------------------//
-let post_AthleteSizes = async (sizes_data) => {
+let post_AthleteRecord = async (record_data) => {
   try {
-    const response = await axios.post("http://localhost:3000/Athletessizes", sizes_data, axiosConfig);
+    const response = await axios.post("http://localhost:3000/AthletesRecords", record_data, axiosConfig);
     return response.data;
   } catch (error) {
     throw error;
@@ -22,9 +22,9 @@ let post_AthleteSizes = async (sizes_data) => {
 };
 
 //------------------GET-----------------------//
-let get_AthleteSizes = async () => {
+let get_AthleteRecords = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/Athletessizes", axiosConfig);
+    const response = await axios.get("http://localhost:3000/AthletesRecords", axiosConfig);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -33,9 +33,9 @@ let get_AthleteSizes = async () => {
 };
 
 //------------------DELETE-----------------------//
-let delete_AthleteSize = async (id) => {
+let delete_AthleteRecord = async (id) => {
   try {
-    const response = await axios.delete(`http://localhost:3000/Athletessizes/${id}`, axiosConfig);
+    const response = await axios.delete(`http://localhost:3000/AthletesRecords/${id}`, axiosConfig);
     return response.data;
   } catch (error) {
     throw error;
@@ -43,13 +43,13 @@ let delete_AthleteSize = async (id) => {
 };
 
 //------------------PUT-----------------------//
-let update_AthleteSize = async (id, sizes_data) => {
-  try {    
-    const response = await axios.put(`http://localhost:3000/Athletessizes/${id}`, sizes_data, axiosConfig);
+let update_AthleteRecord = async (id, record_data) => {
+  try {
+    const response = await axios.put(`http://localhost:3000/AthletesRecords/${id}`, record_data, axiosConfig);
     return response.data;
   } catch (error) {
     throw error;
   }
 };
 
-export default { post_AthleteSizes, get_AthleteSizes, delete_AthleteSize, update_AthleteSize };
+export default { post_AthleteRecord, get_AthleteRecords, delete_AthleteRecord, update_AthleteRecord };

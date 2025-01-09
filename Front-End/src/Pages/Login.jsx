@@ -69,7 +69,7 @@ const Login = () => {
       sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 1050 }}
       role="presentation"
     >
-      <Register_form />;
+      <Register_form close_drawer={(e)=>toggleDrawerRegister(anchor,false)} />;
     </Box>
   );
 

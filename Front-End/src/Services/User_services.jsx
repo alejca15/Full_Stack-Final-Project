@@ -3,7 +3,7 @@ import axios from 'axios';
 const API_URL = 'http://localhost:3000/Users';
 
 //----------------------Get------------------------//
-export const get_users = async () => {
+ const get_users = async () => {
     try {
         const response = await axios.get(API_URL);
         return response.data;
@@ -15,7 +15,7 @@ export const get_users = async () => {
 
 
 //----------------------Post------------------------//
-export const post_user = async (userData) => {
+ const post_user = async (userData) => {
     try {
         const response = await axios.post(API_URL, userData);
         return response.data;
@@ -26,7 +26,7 @@ export const post_user = async (userData) => {
 };
 
 //----------------------Delete------------------------//
-export const delete_user = async (userId) => {
+const delete_user = async (userId) => {
     try {
         await axios.delete(`${API_URL}/${userId}`);
     } catch (error) {
@@ -36,7 +36,7 @@ export const delete_user = async (userId) => {
 };
 
 //----------------------Put------------------------//
-export const update_user = async (userId, userData) => {
+ const update_user = async (userId, userData) => {
     try {
         const response = await axios.put(`${API_URL}/${userId}`, userData);
         return response.data;

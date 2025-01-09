@@ -4,26 +4,26 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
-import getCantons from "../Services/Cantons_services";
-import post_Direction from "../Services/Directions_services";
-import post_Address from "../Services/Addresses_services";
+import Cantons_services from "../Services/Cantons_services";
+import Direction_services from "../Services/Directions_services";
+import Address_Services from "../Services/Addresses_services";
 import Athlete_services from "../Services/Athlete_services";
-import post_AthleteSizes from "../Services/Athlete_sizes_services";
+import Athlete_sizes_services from "../Services/Athlete_sizes_services";
+import User_services from "../Services/User_services";
 
-
-function Register_form() {
+function Register_form({ close_drawer }) {
   const [validated, setValidated] = useState(false);
   const [Name, setName] = useState("");
   const [First_lastname, setFirst_lastname] = useState("");
   const [Second_lastname, setSecond_lastname] = useState("");
   const [Birthday, setBirthday] = useState("");
   const [Nationality, setNationality] = useState("");
-  const [Gender, setGender] = useState("");
+  const [Gender, setGender] = useState("Masculino");
   const [Mail, setMail] = useState("");
   const [Password, setPassword] = useState("");
   const [Phone, setPhone] = useState("");
-  const [Bloodtype, setBloodtype] = useState("");
-  const [Side, setSide] = useState("");
+  const [Bloodtype, setBloodtype] = useState("A+");
+  const [Side, setSide] = useState("Derecha");
   const [Educational_institution, setEducational_institution] = useState("");
   const [Grade, setGrade] = useState("");
   const [Province, SetProvince] = useState(1);
@@ -32,7 +32,7 @@ function Register_form() {
   const [Address, setAddress] = useState("");
   const [Shoesize, setShoesize] = useState("");
   const [Shirtsize, setShirtsize] = useState("");
-  const [Location,setLocation]=useState("");
+  const [Location, setLocation] = useState("");
 
   // Función para manejar el envío del formularioz
   const handleSubmit = (event) => {
@@ -47,7 +47,7 @@ function Register_form() {
   // Función para cargar cantones basados en la provincia seleccionada
   const loadCantons = async (provinceId) => {
     try {
-      const Cantons = await getCantons();
+      const Cantons = await Cantons_services.getCantons();
       const filteredCantons = Cantons.filter(
         (Canton) => Canton.province_id === parseInt(provinceId)
       );
@@ -94,64 +94,84 @@ function Register_form() {
     }
   };
 
-
   //Funcion que hace el post del nuevo Atleta, direction y Sizes
   const add_Athlete = async () => {
-    const Address_data = {
-      direction_name: Address,
-    };
+    try {
+      const Address_data = {
+        direction_name: Address,
+      };
 
-    //Obtenemos el id del JSON que acaba de ser posteado
-    const direction_JSON = await post_Direction(Address_data);
-    const direction_id = direction_JSON.id;
+      //Obtenemos el id del JSON que acaba de ser posteado
+      const direction_JSON = await Direction_services.post_Direction(
+        Address_data
+      );
+      const direction_id = direction_JSON.id;
 
-    const new_Address = {
-      province_id: parseInt(Province),
-      canton_id: parseInt(canton),
-      direction_id: parseInt(direction_id),
-    };
+      const new_Address = {
+        province_id: parseInt(Province),
+        canton_id: parseInt(canton),
+        direction_id: parseInt(direction_id),
+      };
 
-    //Obtenemos el id del JSON que acaba de ser posteado
-    const address_JSON = await post_Address(new_Address);
-    const address_id = address_JSON.id;
+      //Obtenemos el id del JSON que acaba de ser posteado
+      const address_JSON = await Address_Services.post_Address(new_Address);
+      const address_id = address_JSON.id;
 
-    //Fecha y formato legible para el post
-    const date = new Date();
-    const formattedDate = date.toISOString().split("T")[0];
+      //Fecha y formato legible para el post
+      const date = new Date();
+      const formattedDate = date.toISOString().split("T")[0];
 
+      //JSON del Atleta
+      const new_Athlete = {
+        athlete_name: Name,
+        athlete_first_lastname: First_lastname,
+        athlete_second_lastname: Second_lastname,
+        birthday: Birthday,
+        nationality: Nationality,
+        gender: Gender,
+        phone: Phone,
+        blood_type: Bloodtype,
+        address_id: parseInt(address_id),
+        dominant_side: Side,
+        education_entity: Educational_institution,
+        actual_grade: Grade,
+        addition_date: formattedDate,
+        location_id: Location,
+        athlete_status: "Candidato",
+      };
 
-    //JSON del Atleta
-    const new_Athlete = {
-      athlete_name: Name,
-      athlete_first_lastname: First_lastname,
-      athlete_second_lastname: Second_lastname,
-      birthday: Birthday,
-      nationality: Nationality,
-      gender: Gender,
-      mail: Mail,
-      password: Password,
-      phone: Phone,
-      blood_type: Bloodtype,
-      address_id: parseInt(address_id),
-      dominant_side: Side,
-      education_entity: Educational_institution,
-      actual_grade: Grade,
-      addition_date: formattedDate,
-      location_id: Location,
-      athlete_status: "Candidato",
-    };
+      console.log("Nuevo Atleta",new_Athlete);
+      
+      //Obtenemos el id del JSON que acaba de ser posteado
+      const posted_athlete = await Athlete_services.post_Athlete(new_Athlete);
+      const posted_athlete_id = posted_athlete.id;
 
-    //Obtenemos el id del JSON que acaba de ser posteado
-    const posted_athlete = await Athlete_services.post_Athlete(new_Athlete)
-    const posted_athlete_id = posted_athlete.id;
+      const user = {
+        mail: Mail,
+        password: Password,
+        counselor_id: null,
+        admin_id: null,
+        athlete_id: posted_athlete_id,
+        mentor_id: null, //
+      };
 
-    //Post de la talla su tabla
-    const new_Athlete_size = {
-      shoe_sizes_id: parseInt(Shoesize),
-      shirt_sizes_id: parseInt(Shirtsize),
-      athlete_id: posted_athlete_id,
-    };
-    await post_AthleteSizes(new_Athlete_size);
+      console.log("Nuevo Usuario",user);
+      
+
+      const new_user = await User_services.post_user(user);
+      //Post de la talla su tabla
+      const new_Athlete_size = {
+        shoe_sizes_id: parseInt(Shoesize),
+        shirt_sizes_id: parseInt(Shirtsize),
+        athlete_id: posted_athlete_id,
+      };
+      await Athlete_sizes_services.post_AthleteSizes(new_Athlete_size);
+      close_drawer();
+      return console.log("Atleta registrado con éxito");
+    } catch (error) {
+      console.error("Error adding athlete", error);
+      return false;
+    }
   };
 
   return (
@@ -260,7 +280,9 @@ function Register_form() {
                 style={{ width: "7rem" }}
                 aria-label="Default select example"
                 id="Select"
-                onChange={(e)=>{setLocation(e.target.value)}}
+                onChange={(e) => {
+                  setLocation(e.target.value);
+                }}
               >
                 <option value={1}>San José</option>
                 <option value={2}>Sarchí</option>

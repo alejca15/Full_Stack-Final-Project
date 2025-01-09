@@ -45,24 +45,24 @@ sequelize.authenticate()
 // Usar las rutas de productos
 app.use('/auth', auth_routes);
 app.use('/Users', Users_routes);
-app.use('/Provinces', Province_route);
-app.use('/Directions', Directions_route);
-app.use('/Cantons', Cantons_route);
-app.use('/Addresses', Addresses_route);
-app.use('/Athletes', Athletes_route);
-app.use('/Shirtsizes', Shirt_sizes_route);
-app.use('/Shoesizes', Shoe_sizes_route);
-app.use('/Athletessizes', Athlete_sizes_route);
-app.use('/Parents', Parents);
-app.use('/Locations', Locations);
-app.use('/Mentors', Mentors);
-app.use('/MentorsAndAthletes', MentorsAndAthletes);
-app.use('/AthletesRecords', Athletes_records);
-app.use('/Counselors', Counselors);
-app.use('/Comments', Comments);
-app.use('/Admins', Admins);
-app.use('/Incidents', Incidents);
-app.use('/Files', files_routes);
+app.use('/Provinces', auth.verifyToken, Province_route);
+app.use('/Directions',auth.verifyToken, Directions_route);
+app.use('/Cantons',auth.verifyToken, Cantons_route);
+app.use('/Addresses',auth.verifyToken, Addresses_route);
+app.use('/Athletes',auth.verifyToken, Athletes_route);
+app.use('/Shirtsizes',auth.verifyToken, Shirt_sizes_route);
+app.use('/Shoesizes',auth.verifyToken, Shoe_sizes_route);
+app.use('/Athletessizes', auth.verifyToken, Athlete_sizes_route);
+app.use('/Parents',auth.verifyToken,  Parents);
+app.use('/Locations',auth.verifyToken, Locations);
+app.use('/Mentors',auth.verifyToken,  Mentors);
+app.use('/MentorsAndAthletes',auth.verifyToken,  MentorsAndAthletes);
+app.use('/AthletesRecords',auth.verifyToken,  Athletes_records);
+app.use('/Counselors',auth.verifyToken,  Counselors);
+app.use('/Comments', auth.verifyToken, Comments);
+app.use('/Admins', auth.verifyToken, Admins);
+app.use('/Incidents', auth.verifyToken, Incidents);
+app.use('/Files', auth.verifyToken, files_routes);
 
 // Iniciar el servidor
 app.listen(PORT, () => {

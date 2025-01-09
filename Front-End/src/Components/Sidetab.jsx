@@ -68,35 +68,26 @@ export default function Sidetab({ Selected_tab }) {
     switch (Table_name) {
       case "Athletes":
         return [
-          <Tab key="calendario" onClick={goCalendar} label="Calendario" />,
-          <Tab key="incidentes" onClick={goRecords} label="Incidentes" />,
           <Tab key="notas" onClick={goGrades} label="Notas" />,
           <Tab key="informacion" onClick={goUser} label="Informacion del Usuario" />,
         ];
       case "Mentors":
         return [
-          <Tab key="calendario" onClick={goCalendar}  label="Calendario" />,
           <Tab key="atletas" onClick={goAthletes} label="Atletas" />,
-          <Tab key="incidentes" onClick={goRecords} label="Expediente" />,
+          <Tab key="expediente" onClick={goRecords} label="Expediente" />,
           <Tab key="informacion" onClick={goUser}  label="Informacion del Usuario" />,
         ];
       case "Counselors":
         return [
-          <Tab key="calendario" onClick={goCalendar}  label="Calendario" />,
           <Tab key="atletas" onClick={goAthletes} label="Atletas" />,
           <Tab key="mentores" label="Mentores" />,
-          <Tab key="incidentes" onClick={goRecords} label="Incidentes" />,
-          <Tab key="expediente" label="Expediente" />,
+          <Tab key="expediente" onClick={goRecords} label="Expediente" />,
           <Tab key="informacion" onClick={goUser}  label="Informacion del Usuario" />,
         ];
       case "Admins":
         return [
-          <Tab key="calendario" onClick={goCalendar}  label="Calendario" />,
           <Tab key="atletas"  onClick={goAthletes} label="Atletas" />,
-          <Tab key="mentores" label="Mentores" />,
-          <Tab key="orientadores" label="Orientadores" />,
-          <Tab key="incidentes" onClick={goRecords} label="Incidentes" />,
-          <Tab key="expediente" label="Expediente" />,
+          <Tab key="expediente" onClick={goRecords}  label="Expediente" />,
           <Tab key="informacion" onClick={goUser}  label="Informacion del Usuario" />,
           <Tab key="sedes" label="Sedes" />,
         ];

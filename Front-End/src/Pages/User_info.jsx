@@ -11,6 +11,7 @@ import Admins_services from "../Services/Admins_services";
 import "../Styles/User_info.css";
 import Edit_mentor_form from "../Components/Edit_mentor_form";
 
+
 const User_info = () => {
   //Hook de control de tab
   const [userLogged, setUserLogged] = useState(null);
@@ -24,7 +25,7 @@ const User_info = () => {
   //Carga el usuario loggeado
   const Load_user_logged = async () => {
     const serviceMap = {
-      Athletes: Athlete_services.getAthletes,
+      Athletes: Athlete_services.get_Athletes,
       Mentors: Mentors_services.get_mentors,
       Admins: Admins_services.get_Admins,
       Counselors: Counselors_services.get_counselors,
@@ -62,7 +63,7 @@ const User_info = () => {
       case "Athletes":
         return <Edit_athlete_form User={userLogged} />;
       case "Mentors":
-        return <div id="Edit_mentor_form_main_cont"><Edit_mentor_form User={userLogged} /></div>;
+        return <div id="Edit_mentor_form_main_cont"><Edit_mentor_form  User={userLogged} /></div>;
       default:
         return <div>No se encontró el rol del usuario</div>;
     }

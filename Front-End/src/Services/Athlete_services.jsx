@@ -1,30 +1,32 @@
 import axios from "axios";
 
-//----------------------------------Post-------------------------------//
+// Obtener el token de sessionStorage
+const token = sessionStorage.getItem("Token");
 
-const post_Athlete = async (Athlete_Data) => {
+// Headers
+const axiosConfig = {
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`
+  }
+};
+
+//----------------------------------Post-------------------------------//
+const post_Athlete = async (athleteData) => {
   try {
-    const response = await axios.post(
-      "http://localhost:3000/Athletes",
-      Athlete_Data,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await axios.post("http://localhost:3000/Athletes", athleteData, axiosConfig);
     return response.data;
   } catch (error) {
     console.error("Error posting athlete:", error);
+    
     throw error;
   }
 };
 
 //----------------------------------Get-------------------------------//
-
-const getAthletes = async () => {
+const get_Athletes = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/Athletes");
+    const response = await axios.get("http://localhost:3000/Athletes", axiosConfig);
     return response.data;
   } catch (error) {
     console.error("Error fetching athletes:", error);
@@ -34,7 +36,7 @@ const getAthletes = async () => {
 
 const get_accepted_athletes = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/Athletes");
+    const response = await axios.get("http://localhost:3000/Athletes", axiosConfig);
     const accepted_athletes = response.data.filter(
       (user) => user.athlete_status === "Activo"
     );
@@ -46,30 +48,25 @@ const get_accepted_athletes = async () => {
 };
 
 const get_candidates = async () => {
-    try {
-      const response = await axios.get("http://localhost:3000/Athletes");
-      const candidates = response.data.filter(
-        (user) => user.athlete_status === "Candidato"
-      );
-      return candidates;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  };
-
-  //----------------------------------Put-------------------------------//
-const updateAthlete = async (id,athleteData) => {
   try {
-    const id=athleteData.id;
+    const response = await axios.get("http://localhost:3000/Athletes", axiosConfig);
+    const candidates = response.data.filter(
+      (user) => user.athlete_status === "Candidato"
+    );
+    return candidates;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+//----------------------------------Put-------------------------------//
+const update_Athlete = async (id, athleteData) => {
+  try {
     const response = await axios.put(
       `http://localhost:3000/Athletes/${id}`,
       athleteData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+      axiosConfig
     );
     return response.data;
   } catch (error) {
@@ -79,23 +76,14 @@ const updateAthlete = async (id,athleteData) => {
 };
 
 //----------------------------------Delete-------------------------------//
-const deleteAthlete = async (id) => {
+const delete_Athlete = async (id) => {
   try {
-    const response = await axios.delete(
-      `http://localhost:3000/Athletes/${id}`
-    );
-    return response.status === 204 ? "Atleta eliminado con éxito" : null;
+    const response = await axios.delete(`http://localhost:3000/Athletes/${id}`, axiosConfig);
+    return response.data;
   } catch (error) {
     console.error(`Error deleting athlete with ID ${id}:`, error);
     throw error;
   }
 };
 
-export default {
-  post_Athlete,
-  getAthletes,
-  get_accepted_athletes,
-  get_candidates,
-  updateAthlete,
-  deleteAthlete,
-};
+export default { post_Athlete, get_Athletes, get_accepted_athletes, get_candidates, update_Athlete, delete_Athlete };
