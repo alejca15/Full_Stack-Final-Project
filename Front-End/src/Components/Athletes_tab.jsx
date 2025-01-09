@@ -24,8 +24,9 @@ import Mentors_services from "../Services/Mentors_services";
 import Admins_services from "../Services/Admins_services";
 import User_services from "../Services/User_services";
 import Counselors_services from "../Services/Counselors_services";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Athletes_records_services from "../Services/Athletes_records_services";
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
@@ -39,10 +40,32 @@ const AthletesTab = ({ SwitchTab }) => {
   const [parents, setParents] = useState([]);
   const [selected_athlete, setSelected_athlete] = useState({});
   const [Users, setUsers] = useState([]);
+  const [file_view, setfile_view] = useState(false);
+  const [files_records, setFiles_records] = useState([]);
+  const [grade_to_show, setGrade_to_show] = useState(null);
+
+  //useEffect para traer los files records
+  useEffect(() => {
+    try {
+      const response = Athletes_records_services.get_AthleteRecords();
+      if (!response) {
+        return console.log("No se encontraron los files records");
+      } else {
+        setFiles_records(response);
+        return console.log("Files records encontrados");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }, []);
+
+  //useEffect para cargar el ultimo archivo de notas que subio
+  useEffect(() => {}, [files_records]);
 
   //Toastify
-  const toastify_password_resseted = () => toast.success("Contraseña restaurada!");
-  const toastify_athlete_updated= () => toast.success("Atleta Editado!");
+  const toastify_password_resseted = () =>
+    toast.success("Contraseña restaurada!");
+  const toastify_athlete_updated = () => toast.success("Atleta Editado!");
 
   //Manejo del modal
   const [open, setOpen] = React.useState(false);
@@ -51,6 +74,12 @@ const AthletesTab = ({ SwitchTab }) => {
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
+
+  const grade_modal_close = () => setfile_view(false);
+  const grade_modal_open = (athlete) => {
+    const note_info = get_last_note_info(athlete);
+    setfile_view(true);
+  };
 
   //Obtener el valor del token
   const Encrypted_token = sessionStorage.getItem("Token");
@@ -105,7 +134,57 @@ const AthletesTab = ({ SwitchTab }) => {
     6: "Puntarenas",
     7: "Limón",
   };
+  //funcion para obtener la informacion de la nota mas reciente
+  const get_last_note_info = async (athlete) => {
+    try {
+      // Esperar a que la promesa se resuelva
+      const records = await files_records;
 
+      // Asegurarse de que records sea un array
+      if (!Array.isArray(records) || records.length === 0) {
+        return setGrade_to_show(
+          <div id="empty_folder_page" key={"empty_folder"}>
+            <p>No tiene Notas</p>
+          </div>
+        );
+      }
+
+      const athlete_records = records.filter(
+        (file) => file.athlete_id === athlete
+      );
+
+      if (athlete_records.length === 0) {
+        return setGrade_to_show(
+          <div id="empty_folder_page" key={"empty_folder"}>
+            <p>No tiene Notas</p>
+          </div>
+        );
+      }
+
+      // Ordenar los registros por createdAt en orden descendente
+      athlete_records.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+
+      // Retornar el registro más reciente
+      const latest = athlete_records[0];
+
+      if (latest) {
+        setGrade_to_show(
+          <iframe src={latest.file_url} width="100%" height="100%" />
+        );
+      }
+
+      return latest;
+    } catch (error) {
+      console.error("Error fetching athlete records:", error);
+      return setGrade_to_show(
+        <div id="empty_folder_page" key={"empty_folder"}>
+          <p>Error al obtener las notas</p>
+        </div>
+      );
+    }
+  };
   //Convertir fecha a string
   const formatDate = (dateString) => {
     const options = {
@@ -152,7 +231,6 @@ const AthletesTab = ({ SwitchTab }) => {
         if (cantonsResponse) setCantons(cantonsResponse);
         if (parentsResponse) setParents(parentsResponse);
         if (usersResponse) setUsers(usersResponse);
-        
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -205,13 +283,13 @@ const AthletesTab = ({ SwitchTab }) => {
   };
 
   //Funcion que busca el correo del usuario y devuelve
-  const load_mail =(athlete)=>{
+  const load_mail = (athlete) => {
     const user = Users.find((user) => user.athlete_id === athlete.id);
     if (user) {
-      return <p>{user.mail}</p>
+      return <p>{user.mail}</p>;
     }
-    return <p>No hay correo</p>
-  }
+    return <p>No hay correo</p>;
+  };
 
   //Funcion que despliega el tab con la informacion del atleta
   const DisplayAthletes = () => {
@@ -259,14 +337,16 @@ const AthletesTab = ({ SwitchTab }) => {
                             <HomeRepairServiceIcon />
                           </p>
                           <p id="grades_icon">
-                            <GradingIcon />
+                            <GradingIcon
+                              onClick={() => grade_modal_open(athlete.id)}
+                            />
                           </p>
                         </div>
                       </AccordionSummary>
                       <AccordionDetails id="Athlete_accordion_info">
                         <div id="mail_cont">
                           <p style={{ fontWeight: "bold" }}>Correo</p>
-                          {load_mail(athlete)}  
+                          {load_mail(athlete)}
                         </div>
                         <div id="address_cont">
                           <div>
@@ -386,7 +466,38 @@ const AthletesTab = ({ SwitchTab }) => {
         >
           <Fade in={open}>
             <Box id="edit_athlete_form_box" sx={style}>
-              <Edit_athlete_form User={{ ...selected_athlete }} Self_close={handleClose} Resseted_toastify={toastify_password_resseted} Athlete_updated={toastify_athlete_updated} />
+              <Edit_athlete_form
+                User={{ ...selected_athlete }}
+                Self_close={handleClose}
+                Resseted_toastify={toastify_password_resseted}
+                Athlete_updated={toastify_athlete_updated}
+              />
+            </Box>
+          </Fade>
+        </Modal>
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          open={file_view}
+          onClose={grade_modal_close}
+          closeAfterTransition
+          slots={{ backdrop: Backdrop }}
+          slotProps={{
+            backdrop: {
+              timeout: 500,
+            },
+          }}
+        >
+          <Fade in={file_view}>
+            <Box className="file_view_modal">
+              <Box id="file_view_cont">{grade_to_show}</Box>
+              <Button
+                onClick={grade_modal_close}
+                variant="contained"
+                color="info"
+              >
+                Cerrar
+              </Button>
             </Box>
           </Fade>
         </Modal>

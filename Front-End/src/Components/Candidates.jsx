@@ -80,7 +80,7 @@ const Candidates_tab = ({ SwitchTab }) => {
   const deny_athlete = async (athlete) => {
     try {
       athlete.athlete_status = "Inactivo";
-      const response = await Athlete_services.updateAthlete(athlete);
+      const response = await Athlete_services.update_Athlete(athlete);
       if (!response) {
         console.error(error);
         return console.log("El atleta no pudo ser actualizado");

@@ -1,17 +1,16 @@
-import { useState,useContext } from "react";
+import { useState, useContext } from "react";
 import { TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import post_login from "../Services/post_login";
 import Endurance_context from "./Context/Endurance_context";
 import { jwtDecode } from "jwt-js-decode";
+import Athlete_services from "../Services/Athlete_services";
 
 function Login_form() {
   const navigate = useNavigate();
   const [Password, setPassword] = useState("");
   const [Mail, setMail] = useState("");
-  const {login} =useContext(Endurance_context);
-
-
+  const { login } = useContext(Endurance_context);
 
   const validate_login = async () => {
     //Validaciones
@@ -30,12 +29,17 @@ function Login_form() {
       const Decoded_token = jwtDecode(token);
       const Token_JSON = Decoded_token.payload;
       const Rol = Token_JSON.Rol;
+      
+      if (Rol === "Athletes") {
+        const Candidates = await Athlete_services.get_candidates();
+        const is_candidate = Candidates.find((candidate) => candidate.id === Token_JSON.Table_id);
+        if (is_candidate) {
+          return window.location.reload()
+        }
+      }
       login(Rol);
-      navigate("/Home")
+      navigate("/Home");
     }
-
-    
-    
   };
 
   return (
