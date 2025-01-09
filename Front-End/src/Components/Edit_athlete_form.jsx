@@ -14,7 +14,7 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Backdrop from "@mui/material/Backdrop";
 
-const Edit_athlete_form = ({ User,Resseted_toastify }) => {
+const Edit_athlete_form = ({ User,Resseted_toastify,Self_close,Athlete_updated }) => {
   const [cantons, setCantons] = useState([]);
   const [province, setProvince] = useState(1);
   const [canton, setCanton] = useState("");
@@ -279,7 +279,9 @@ const Edit_athlete_form = ({ User,Resseted_toastify }) => {
         }
         if (response) {
           console.log("Atleta actualizado");
-          
+          Self_close();
+          Athlete_updated();
+
         }
   
         //Put de Athlete_sizes

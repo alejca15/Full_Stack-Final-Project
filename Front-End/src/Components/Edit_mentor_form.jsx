@@ -29,8 +29,7 @@ const Edit_mentor_form = () => {
     const fetchData = async () => {
       try {
         const [Location_response, Users_response, Mentors_response] =
-          await Promise.all([
-            Locations_services.get_Locations(),
+          await Promise.all([,
             User_services.get_users(),
             Mentors_services.get_mentors(),
           ]);
@@ -80,9 +79,6 @@ const Edit_mentor_form = () => {
     validationSchema: Yup.object({
       mentor_name: Yup.string().required("Campo obligatorio"),
       mentor_lastname: Yup.string().required("Campo obligatorio"),
-      location_id: Yup.number()
-        .required("Campo obligatorio")
-        .integer("Debe ser un número entero"),
       phone: Yup.string()
         .required("Campo obligatorio")
         .matches(/^[0-9]+$/, "Debe ser un número válido"),
@@ -120,19 +116,6 @@ const Edit_mentor_form = () => {
           </Box>
 
           <Box id="Mentor_contact_cont">
-            <TextField
-              id="edit_form_input"
-              name="location_id"
-              label="ID de Ubicación"
-              value={formik.values.location_id}
-              onChange={formik.handleChange}
-              error={
-                formik.touched.location_id && Boolean(formik.errors.location_id)
-              }
-              helperText={
-                formik.touched.location_id && formik.errors.location_id
-              }
-            />
             <TextField
               id="edit_form_input"
               name="phone"

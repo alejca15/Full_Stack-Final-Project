@@ -45,7 +45,7 @@ const User_info = () => {
   useEffect(() => {
     const fetchUser = async () => {
       const user = await Load_user_logged();
-      setUserLogged(user); // Establecemos el estado con los datos del usuario
+      setUserLogged(user); 
     };
 
     fetchUser();

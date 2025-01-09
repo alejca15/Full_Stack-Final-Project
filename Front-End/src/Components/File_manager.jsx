@@ -1,4 +1,3 @@
-import React, { useState, useEffect, useRef, act } from "react";
 import {
   getStorage,
   ref,
@@ -7,6 +6,7 @@ import {
   getDownloadURL,
   deleteObject,
 } from "firebase/storage";
+import React, { useState, useEffect, useRef, act } from "react";
 import { Button, Box, Typography, Modal, Fade, TextField } from "@mui/material";
 import FilesServices from "../Services/Files_Services";
 import { storage } from "../firebaseConfig";
@@ -772,7 +772,6 @@ const File_manager = () => {
 
   //Funcion que elimina una carpeta
   const delete_folder = async (folderPath) => {
-
     const folderRef = ref(storage, folderPath);
     try {
       // Listar todos los archivos y carpetas dentro de la carpeta
@@ -806,7 +805,7 @@ const File_manager = () => {
       if (file.Name === "Notas") {
         folder_cant_be_remove();
         setCancel_modal_visibility(false);
-        return; 
+        return;
       }
       if (file.Url !== null) {
         delete_file(file.Path);
@@ -1115,7 +1114,7 @@ const File_manager = () => {
         </div>
         {display_all_files()}
       </div>
-      //Modal para añadir archivos
+      {/*Modal para añadir archivos*/}
       <Modal
         open={file_modal_visibility}
         onClose={file_modal_close}
@@ -1150,7 +1149,7 @@ const File_manager = () => {
           </Box>
         </Fade>
       </Modal>
-      //Modal para crear carpetas
+      {/*Modal para crear carpetas*/}
       <Modal
         open={folder_modal_visibliity}
         onClose={folder_modal_close}
@@ -1187,7 +1186,7 @@ const File_manager = () => {
           </Box>
         </Fade>
       </Modal>
-      //Modal de cancelar
+      {/*Modal para cancelar*/}
       <Modal
         open={cancel_modal_visibliity}
         onClose={cancel_modal_visibliity_close}
@@ -1220,6 +1219,7 @@ const File_manager = () => {
           </Box>
         </Fade>
       </Modal>
+      {/*Modal para cambiar nombre*/}
       <Modal
         open={edit_file_name_modal_visibility}
         onClose={change_file_name_modal_close}
@@ -1253,6 +1253,7 @@ const File_manager = () => {
           </Box>
         </Fade>
       </Modal>
+      {/*Modal para ver y descargar*/}
       <Modal
         open={download_file_modal_visibility}
         onClose={dowload_file_modal_close}

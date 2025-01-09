@@ -1,29 +1,86 @@
-.Grades_Tab_body{
-    border: 5px solid black;
-    min-height: 100%;
-    max-height: 100vh;
-    display: grid;
-    grid-template-rows: 1fr 100px;
+.Grades_Tab_body {
+  border: 5px solid black;
+  min-height: 100%;
+  max-height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr 100px;
 }
 
-.Grades_Tab_Footer{
-    height: 60px;
-    width: 100%;
-    grid-row: 2;
-    display: flex;
-    align-self: flex-end;
-    justify-content: right;
+.Grades_Tab_Footer {
+  height: 60px;
+  width: 100%;
+  grid-row: 2;
+  display: flex;
+  align-self: flex-end;
+  justify-content: right;
 }
 .Grades_Tab_Footer Button {
-    position: absolute;
-    z-index: 2000;
-    border-radius: 20px;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  position: absolute;
+  z-index: 2000;
+  border-radius: 20px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
-.Grades_container{
-    position: fixed;
-    z-index: 100;
-    grid-row: 1/2;
-    border: 1px solid blue;
+.Grades_container {
+  position: fixed;
+  z-index: 100;
+  grid-row: 1/2;
+  border: 1px solid blue;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 50px auto;
+}
+
+.note_cont {
+  width: 170px;
+  height: 200px;
+  border-radius: 10px;
+  margin: 100px;
+  display: grid;
+  grid-row: 90% 40px;
+  justify-content: center;
+}
+.note_cont p {
+  width: 100%;
+  text-align: center;
+}
+
+#pdf_icon {
+  width: 150px;
+  height: 150px;
+}
+
+.file_view_modal {
+  display: grid;
+  grid-template-rows: 90% 1fr;
+  justify-self: center;
+  align-self: center;
+  width: 70%;
+  height: 85%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 4;
+  z-index: 8000;border-radius: 5px;
+  border-style: none;
+}
+
+.file_view_modal Button {
+  justify-self: center;
+  align-self: center;
+  width: 80px;
+  height: 40px;
+}
+
+#file_view_cont {
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

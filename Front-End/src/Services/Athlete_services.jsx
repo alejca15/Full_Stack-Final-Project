@@ -3,6 +3,11 @@ import axios from "axios";
 // Obtener el token de sessionStorage
 const token = sessionStorage.getItem("Token");
 
+// Verificar si el token está presente
+if (!token) {
+  console.error("No se encontró el token en sessionStorage");
+}
+
 // Headers
 const axiosConfig = {
   headers: {
