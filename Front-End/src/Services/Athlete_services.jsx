@@ -52,6 +52,20 @@ const get_accepted_athletes = async () => {
   }
 };
 
+const get_inactive_athletes = async () => {
+  try {
+    const response = await axios.get("http://localhost:3000/Athletes", axiosConfig);
+    const inactive_athletes = response.data.filter(
+      (user) => user.athlete_status === "Inactivo"
+    );
+    return inactive_athletes;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+
 const get_candidates = async () => {
   try {
     const response = await axios.get("http://localhost:3000/Athletes", axiosConfig);
@@ -91,4 +105,4 @@ const delete_Athlete = async (id) => {
   }
 };
 
-export default { post_Athlete, get_Athletes, get_accepted_athletes, get_candidates, update_Athlete, delete_Athlete };
+export default { post_Athlete,get_inactive_athletes, get_Athletes, get_accepted_athletes, get_candidates, update_Athlete, delete_Athlete };

@@ -13,7 +13,7 @@ function Login_form() {
   const { login } = useContext(Endurance_context);
 
   const validate_login = async () => {
-    //Validaciones
+    // Validaciones
     if (!Password || !Mail) {
       return console.log("Faltan datos");
     }
@@ -22,21 +22,30 @@ function Login_form() {
 
     const encrypted_token_JSON = await post_login(credentials);
 
-    //Resultado y manejo del Token
+    // Resultado y manejo del Token
     if (encrypted_token_JSON && encrypted_token_JSON.token) {
       const token = encrypted_token_JSON.token;
       sessionStorage.setItem("Token", token);
       const Decoded_token = jwtDecode(token);
       const Token_JSON = Decoded_token.payload;
       const Rol = Token_JSON.Rol;
-      
+
       if (Rol === "Athletes") {
+        // Verificar si el atleta es candidato
         const Candidates = await Athlete_services.get_candidates();
         const is_candidate = Candidates.find((candidate) => candidate.id === Token_JSON.Table_id);
         if (is_candidate) {
-          return window.location.reload()
+          return window.location.reload();
+        }
+
+        // Verificar si el atleta es inactivo
+        const InactiveAthletes = await Athlete_services.get_inactive_athletes();
+        const is_inactive = InactiveAthletes.find((inactive) => inactive.id === Token_JSON.Table_id);
+        if (is_inactive) {
+          return window.location.reload();
         }
       }
+
       login(Rol);
       navigate("/Home");
     }

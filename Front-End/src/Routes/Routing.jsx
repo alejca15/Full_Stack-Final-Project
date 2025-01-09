@@ -14,10 +14,10 @@ function Routing() {
       <Routes>
         <Route path="/Login" element={<Login />} />
         <Route path="/Home" element={<Private_routes><Home /></Private_routes>} />
-        <Route path="/Home/User" element={<User_info />} />
-        <Route path="/Home/Grades" element={<Grades />} />
-        <Route path="/Home/Records" element={<Records />} />
-        <Route path="/Home/Athletes" element={<Athletes />} />
+        <Route path="/Home/User" element={<Private_routes><User_info /></Private_routes>} />
+        <Route path="/Home/Grades" element={<Private_routes><Grades /></Private_routes>} />
+        <Route path="/Home/Records" element={<Private_routes><Records /></Private_routes>} />
+        <Route path="/Home/Athletes" element={<Private_routes><Athletes /></Private_routes>} />
       </Routes>
     </Router>
   );
